@@ -5,8 +5,8 @@ import java.util.Objects;
 public class SubTask extends Task {
     private Epic epic;
 
-    public SubTask(Integer id, String name, String description, String status, Epic epic) {
-        super(id, name, description, status);
+    public SubTask(Integer id, String name, String description, TaskStatus taskStatus, Epic epic) {
+        super(id, name, description, taskStatus);
         this.epic = epic;
     }
 
@@ -44,7 +44,7 @@ public class SubTask extends Task {
                 "id=" + super.getId() +
                 ", name='" + super.getName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
-                ", status='" + super.getStatus() + '\'' +
+                ", status='" + super.getTaskStatus() + '\'' +
                 ", epic=" + epic.getId() + " " + epic.getName() +
                 '}';
     }

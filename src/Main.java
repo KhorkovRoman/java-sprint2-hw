@@ -1,6 +1,7 @@
 import TaskStructure.Epic;
 import TaskStructure.SubTask;
 import TaskStructure.Task;
+import TaskStructure.TaskStatus;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -8,7 +9,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Manager manager = new Manager();
+        InMemoryTaskManager manager = Managers.getDefault();
+        InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
         UserIn userIn = new UserIn();
 
         System.out.println("Менеджер задач.");
@@ -24,8 +26,8 @@ public class Main {
                         int id = manager.generateId();
                         String name = userIn.taskName();
                         String description = userIn.taskDescritpion();
-                        String status = manager.statusNew;
-                        Task task = new Task(id, name, description, status);
+                        TaskStatus taskStatus = TaskStatus.NEW;
+                        Task task = new Task(id, name, description, taskStatus);
                         manager.setTask(task);
                         break;
                     } else if (userInputSubMenu == 2) {   //эпик
@@ -33,8 +35,8 @@ public class Main {
                         String name = userIn.epicName();
                         String description = userIn.epicDescritpion();
                         HashMap<Integer, SubTask> subTasks = manager.subTasks;
-                        String status = manager.statusNew;
-                        Epic epic = new Epic(id, name, description, status, subTasks);
+                        TaskStatus taskStatus = TaskStatus.NEW;
+                        Epic epic = new Epic(id, name, description, taskStatus, subTasks);
                         manager.setEpic(epic);
                         break;
                     } else if (userInputSubMenu == 3) { //подзадача
@@ -43,9 +45,9 @@ public class Main {
                             int id = manager.generateId();
                             String name = userIn.subTaskName();
                             String description = userIn.subTaskDescritpion();
-                            String status = manager.statusNew;
+                            TaskStatus taskStatus = TaskStatus.NEW;
                             Epic currentEpic = manager.epics.get(currentKey);
-                            SubTask subTask = new SubTask(id, name, description, status, currentEpic);
+                            SubTask subTask = new SubTask(id, name, description, taskStatus, currentEpic);
                             manager.setSubTasks(subTask);
                             break;
                         } else {
@@ -57,7 +59,29 @@ public class Main {
                     printSubMenu();
                     userInputSubMenu = scanner.nextInt();
                 }
-            } else if (userInput == 2) {  //обновить
+            } else if (userInput == 2) {                //Просмотр
+                printSubMenu();
+                int userInputSubMenu = scanner.nextInt();
+                while (userInputSubMenu != 0) {
+                    if (userInputSubMenu == 1) {        //задача
+                        int id = userIn.taskId();
+                        manager.getTask(id, historyManager);
+                        break;
+                    } else if (userInputSubMenu == 2) {  // эпик
+                        int id = userIn.epicId();
+                        manager.getEpic(id, historyManager);
+                        break;
+                    } else if (userInputSubMenu == 3) { //подзадача
+                        int id = userIn.subTaskId();
+                        manager.getSubTask(id, historyManager);
+                        break;
+                    } else {
+                        System.out.println("Извините, такой команды нет.");
+                    }
+                    printSubMenu();
+                    userInputSubMenu = scanner.nextInt();
+                }
+            } else if (userInput == 3) {  //обновить
                 printSubMenu();
                 int userInputSubMenu = scanner.nextInt();
                 while (userInputSubMenu != 0) {
@@ -69,8 +93,8 @@ public class Main {
                             task.setName(name);
                             String description = userIn.taskDescritpion();
                             task.setDescription(description);
-                            String status = userIn.taskStatus(manager);
-                            task.setStatus(status);
+                            TaskStatus taskStatus = userIn.taskStatus();
+                            task.setTaskStatus(taskStatus);
 
                             manager.updateTask(task);
                         } else {
@@ -91,7 +115,7 @@ public class Main {
                             System.out.println("Эпика с таким номером нет в базе");
                         }
                         break;
-                    } else if (userInputSubMenu == 3) { //подзадача
+                    } else if (userInputSubMenu == 3) { //подзадачу
                         int id = userIn.subTaskId();
                         if(manager.subTasks.containsKey(id)) {
                             SubTask subTask = manager.subTasks.get(id);
@@ -99,8 +123,8 @@ public class Main {
                             subTask.setName(name);
                             String description = userIn.subTaskDescritpion();
                             subTask.setDescription(description);
-                            String status = userIn.subTaskStatus(manager);
-                            subTask.setStatus(status);
+                            TaskStatus taskStatus = userIn.subTaskStatus();
+                            subTask.setTaskStatus(taskStatus);
 
                             manager.updateSubTask(subTask);
                         } else {
@@ -113,19 +137,24 @@ public class Main {
                     printSubMenu();
                     userInputSubMenu = scanner.nextInt();
                 }
-            } else if (userInput == 3) {          //Распечатать список задач
+            } else if (userInput == 4) {          //Распечатать список
                 printSubMenu();
                 int userInputSubMenu = scanner.nextInt();
                 while (userInputSubMenu != 0) {
-                    if (userInputSubMenu == 1) {     //задачу
+                    if (userInputSubMenu == 1) {     //задач
                         manager.printTasks();
                         break;
-                    } else if (userInputSubMenu == 2) {  // эпик
+                    } else if (userInputSubMenu == 2) {  // эпиков
                         manager.printEpics();
                         break;
-                    } else if (userInputSubMenu == 3) { //подзадача
+                    } else if (userInputSubMenu == 3) { //подзадач
                         int id = userIn.epicId();
-                        manager.printSubTasks(id);
+                        if (manager.epics.containsKey(id)) {
+                            Epic epic = manager.epics.get(id);
+                            manager.printSubTasks(epic);
+                        } else {
+                            System.out.println("Эпика с таким номером нет в базе");
+                        }
                         break;
                     } else {
                         System.out.println("Извините, такой команды нет.");
@@ -133,24 +162,35 @@ public class Main {
                     printSubMenu();
                     userInputSubMenu = scanner.nextInt();
                 }
-            } else if (userInput == 4) {    //удалить
+            } else if (userInput == 5) {    //удалить
                 printSubMenu();
                 int userInputSubMenu = scanner.nextInt();
                 while (userInputSubMenu != 0) {
                     if (userInputSubMenu == 1) {    //задачу
                         int id = userIn.taskId();
-                        manager.removeTask(id);
+                        if (manager.tasks.containsKey(id)) {
+                            Task task = manager.tasks.get(id);
+                            manager.removeTask(task);
+                        } else {
+                            System.out.println("Задачи с таким номером нет в базе");
+                        }
                         break;
                     } else if (userInputSubMenu == 2) {   //эпик
                         int id = userIn.epicId();
-                        manager.removeEpic(id);
+                        if (manager.epics.containsKey(id)) {
+                            Epic epic = manager.epics.get(id);
+                            HashMap<Integer, SubTask> SubTaskList = epic.getSubTaskList();
+                            manager.removeEpic(epic, SubTaskList);
+                        } else {
+                            System.out.println("Эпика с таким номером нет в базе");
+                        }
                         break;
-                    } else if (userInputSubMenu == 3) { //подзадача
+                    } else if (userInputSubMenu == 3) { //подзадачу
                         int id = userIn.subTaskId();
 
                         if(manager.subTasks.containsKey(id)) {
-                            SubTask currentSubTask = manager.subTasks.get(id);
-                            manager.removeSubTask(currentSubTask);
+                            SubTask subTask = manager.subTasks.get(id);
+                            manager.removeSubTask(subTask);
                         } else {
                             System.out.println("Подзадачи с таким номером нет в базе");
                         }
@@ -161,8 +201,11 @@ public class Main {
                     printSubMenu();
                     userInputSubMenu = scanner.nextInt();
                 }
-            } else if (userInput == 5) {
+            } else if (userInput == 6) {         //удалить все задачи, эпики и подзадачи
                 manager.deleteAllTasksAndEpics();
+            } else if (userInput == 7) {         //показать историю просмотров задач
+                historyManager.history();
+
             } else {
                 System.out.println("Извините, такой команды нет");
             }
@@ -173,18 +216,18 @@ public class Main {
     }
 
     private static void printMenu() {
-        System.out.println("");
         System.out.println("Что вы хотите сделать?");
         System.out.println("1 - Ввести новую задачу");
-        System.out.println("2 - Обновить задачу");
-        System.out.println("3 - Распечатать список задач");
-        System.out.println("4 - Удалить задачу");
-        System.out.println("5 - Удалить все задачи");
+        System.out.println("2 - Просмотр задачи");
+        System.out.println("3 - Обновить задачу");
+        System.out.println("4 - Распечатать список задач");
+        System.out.println("5 - Удалить задачу");
+        System.out.println("6 - Удалить все задачи");
+        System.out.println("7 - Показать историю просмотров задач");
         System.out.println("0 - Закрыть приложение");
     }
 
     private static void printSubMenu() {
-        System.out.println("");
         System.out.println("Введите тип задачи:");
         System.out.println("1 - Отдельная задача");
         System.out.println("2 - Эпик");

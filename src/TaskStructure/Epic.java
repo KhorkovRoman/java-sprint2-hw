@@ -6,8 +6,8 @@ import java.util.Objects;
 public class Epic extends Task {
     private HashMap<Integer, SubTask> subTaskList;
 
-    public Epic(Integer id, String name, String description, String status, HashMap<Integer, SubTask> subTaskList) {
-        super(id, name, description, status);
+    public Epic(Integer id, String name, String description, TaskStatus taskStatus, HashMap<Integer, SubTask> subTaskList) {
+        super(id, name, description, taskStatus);
         this.subTaskList = subTaskList;
     }
 
@@ -45,7 +45,7 @@ public class Epic extends Task {
                 "id=" + super.getId() +
                 ", name='" + super.getName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
-                ", status='" + super.getStatus() + '\'' +
+                ", status='" + super.getTaskStatus() + '\'' +
                 ", subTaskList =" + subTaskList.toString() +
                 '}';
     }
