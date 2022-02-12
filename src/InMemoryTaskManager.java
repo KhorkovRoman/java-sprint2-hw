@@ -7,11 +7,53 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
 
-    Integer id = 0;
+    private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+
+    private Integer id = 0;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public HashMap<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(HashMap<Integer, Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public HashMap<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    public void setEpics(HashMap<Integer, Epic> epics) {
+        this.epics = epics;
+    }
+
+    public HashMap<Integer, SubTask> getSubTasks() {
+        return subTasks;
+    }
+
+    public void setSubTasks(HashMap<Integer, SubTask> subTasks) {
+        this.subTasks = subTasks;
+    }
+
+    public InMemoryHistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    public void setHistoryManager(InMemoryHistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
 
     @Override
     public Integer generateId() {
@@ -40,7 +82,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getTask(int id, InMemoryHistoryManager historyManager) {
+    public void getTask(int id) {
         if(tasks.containsKey(id)) {
             Task task = tasks.get(id);
             historyManager.addHistoryList(task);
@@ -51,7 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getEpic(int id, InMemoryHistoryManager historyManager) {
+    public void getEpic(int id) {
         if (epics.containsKey(id)) {
             Epic epic = epics.get(id);
             historyManager.addHistoryList(epic);
@@ -62,7 +104,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getSubTask(int id, InMemoryHistoryManager historyManager) {
+    public void getSubTask(int id) {
         if (subTasks.containsKey(id)) {
             SubTask subTask = subTasks.get(id);
             historyManager.addHistoryList(subTask);
@@ -181,6 +223,11 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println(subTask);
             }
         }
+    }
+
+    @Override
+    public List<Task> history() {
+        return historyManager.getHistory();
     }
 
     @Override

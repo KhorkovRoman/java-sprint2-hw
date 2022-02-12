@@ -4,7 +4,15 @@ import java.util.Scanner;
 
 public class UserIn {
     Scanner scanner = new Scanner(System.in);
-    TaskStatus taskStatus;
+    private TaskStatus taskStatus;
+
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
+    }
 
     public Integer taskId() {
         System.out.println("Введите номер задачи");

@@ -5,24 +5,33 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    List<Task> historyList = new ArrayList<>();
+    private List<Task> historyList = new ArrayList<>();
+
+    public List<Task> getHistoryList() {
+        return historyList;
+    }
+
+    public void setHistoryList(List<Task> historyList) {
+        this.historyList = historyList;
+    }
 
     @Override
-    public void history() {
-        int i = 0;
-        for (Task task: historyList) {
-            i++;
-            System.out.println("Запись " + i + " " + task);
-        }
+    public List<Task> getHistory() {
+        return historyList;
     }
 
     @Override
     public void addHistoryList(Task task) {
-        if (historyList.size() < 10) {
-            historyList.add(task);
-        } else {
+        if (historyList.size() >= 10) {
             historyList.remove(0);
-            historyList.add(task);
         }
+        historyList.add(task);
+    }
+
+    @Override
+    public String toString() {
+        return "InMemoryHistoryManager{" +
+                "historyList=" + historyList +
+                '}';
     }
 }

@@ -4,6 +4,7 @@ import TaskStructure.Task;
 import TaskStructure.TaskStatus;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -15,11 +16,11 @@ public interface TaskManager {
 
     void setSubTasks(SubTask subTask);
 
-    void getTask(int id, InMemoryHistoryManager historyManager);
+    void getTask(int id);
 
-    void getEpic(int id, InMemoryHistoryManager historyManager);
+    void getEpic(int id);
 
-    void getSubTask(int id, InMemoryHistoryManager historyManager);
+    void getSubTask(int id);
 
     void updateTask(Task task);
 
@@ -42,6 +43,8 @@ public interface TaskManager {
     void printEpics();
 
     void printSubTasks(Epic epic);
+
+    List<Task> history();
 
     void deleteAllTasksAndEpics();
 }
