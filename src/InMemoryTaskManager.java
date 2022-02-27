@@ -85,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void getTask(int id) {
         if(tasks.containsKey(id)) {
             Task task = tasks.get(id);
-            historyManager.addHistoryList(task);
+            historyManager.linkLast(task);
             System.out.println(task);
         } else {
             System.out.println("Задачи с таким номером нет в базе");
@@ -96,7 +96,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void getEpic(int id) {
         if (epics.containsKey(id)) {
             Epic epic = epics.get(id);
-            historyManager.addHistoryList(epic);
+            historyManager.linkLast(epic);
             System.out.println(epic);
         } else {
             System.out.println("Эпика с таким номером нет в базе");
@@ -107,7 +107,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void getSubTask(int id) {
         if (subTasks.containsKey(id)) {
             SubTask subTask = subTasks.get(id);
-            historyManager.addHistoryList(subTask);
+            historyManager.linkLast(subTask);
             System.out.println(subTask);
         } else {
             System.out.println("Подзадачи с таким номером нет в базе");

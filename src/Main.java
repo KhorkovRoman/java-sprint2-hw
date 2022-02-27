@@ -203,7 +203,7 @@ public class Main {
             } else if (userInput == 6) {         //удалить все задачи, эпики и подзадачи
                 manager.deleteAllTasksAndEpics();
             } else if (userInput == 7) {         //показать историю просмотров задач
-                System.out.println(manager.getHistoryManager().getHistory());
+                System.out.println(manager.history());
             } else {
                 System.out.println("Извините, такой команды нет");
             }

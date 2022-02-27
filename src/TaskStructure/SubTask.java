@@ -40,7 +40,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "TaskStructure.SubTask{" +
+        return "SubTask{" +
                 "id=" + super.getId() +
                 ", name='" + super.getName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
