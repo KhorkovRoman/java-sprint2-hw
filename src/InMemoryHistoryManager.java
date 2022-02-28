@@ -10,7 +10,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private final List<Task> historyList = new ArrayList<>();
 
-    Map<Integer, Node<Task>> mapHistory = new HashMap<>();
+    private final Map<Integer, Node<Task>> mapHistory = new HashMap<>();
 
     private Node<Task> firstNode;
     private Node<Task> lastNode;
@@ -76,12 +76,24 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void addHistory(Task task) {
-
+        linkLast(task);
     }
 
     @Override
     public void removeHistory(int id) {
+        if (mapHistory.containsKey(id)) {
+            Node<Task> node = mapHistory.get(id);
+            removeNode(node);
+            mapHistory.remove(id);
+        }
+    }
 
+    public void clearHistory() {
+        for (Integer i: mapHistory.keySet()) {
+            Node<Task> node = mapHistory.get(i);
+            removeNode(node);
+        }
+        mapHistory.clear();
     }
 
     @Override
