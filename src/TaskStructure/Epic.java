@@ -43,10 +43,10 @@ public class Epic extends Task {
     public String toString() {
         return "Epic{" +
                 "id=" + super.getId() +
-//                ", name='" + super.getName() + '\'' +
-//                ", description='" + super.getDescription() + '\'' +
-//                ", status='" + super.getTaskStatus() + '\'' +
-//                ", subTaskList =" + subTaskList.toString() +
+                ", name='" + super.getName() + '\'' +
+                ", description='" + super.getDescription() + '\'' +
+                ", status='" + super.getTaskStatus() + '\'' +
+                ", subTaskList =" + subTaskList.toString() +
                 '}';
     }
 }
