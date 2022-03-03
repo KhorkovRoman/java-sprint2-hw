@@ -7,9 +7,99 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
+    static InMemoryTaskManager manager = Managers.getDefault();
+    
     public static void main(String[] args) {
+        testHistory(manager);
+    }
+
+    private static void testHistory(InMemoryTaskManager manager) {
+        Task task1 = new Task(1, "Таск1", "Описание Таск1", TaskStatus.NEW);
+        manager.setTask(task1);
+        Task task2 = new Task(2, "Таск1", "Описание Таск1", TaskStatus.NEW);
+        manager.setTask(task2);
+
+        HashMap<Integer, SubTask> subTasks1 = new HashMap<>();
+        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW, subTasks1);
+        manager.setEpic(epic1);
+
+        SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW, epic1);
+        manager.setSubTasks(subTask1);
+        SubTask subTask2 = new SubTask(5, "СабТаск2", "Описание СабТаск2", TaskStatus.NEW, epic1);
+        manager.setSubTasks(subTask2);
+        SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW, epic1);
+        manager.setSubTasks(subTask3);
+
+        HashMap<Integer, SubTask> subTasks2 = new HashMap<>();
+        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW, subTasks2);
+        manager.setEpic(epic2);
+        System.out.println();
+
+        manager.getTask(1);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getTask(2);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getEpic(3);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getSubTask(4);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getSubTask(5);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getSubTask(6);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getEpic(7);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getTask(1);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getSubTask(5);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        manager.getTask(2);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        Task task = manager.getTasks().get(1);
+        manager.removeTask(task);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+
+        Epic epic = manager.getEpics().get(3);
+        manager.removeEpic(epic);
+        System.out.println("История просмотров:");
+        printHistory();
+        System.out.println();
+    }
+
+    private static void testMenu(InMemoryTaskManager manager) {
         Scanner scanner = new Scanner(System.in);
-        InMemoryTaskManager manager = Managers.getDefault();
         UserIn userIn = new UserIn();
 
         System.out.println("Менеджер задач.");
@@ -33,7 +123,8 @@ public class Main {
                         int id = manager.generateId();
                         String name = userIn.epicName();
                         String description = userIn.epicDescritpion();
-                        HashMap<Integer, SubTask> subTasks = manager.getSubTasks();
+                        //HashMap<Integer, SubTask> subTasks = manager.getSubTasks();
+                        HashMap<Integer, SubTask> subTasks = new HashMap<>();
                         TaskStatus taskStatus = TaskStatus.NEW;
                         Epic epic = new Epic(id, name, description, taskStatus, subTasks);
                         manager.setEpic(epic);
@@ -178,8 +269,7 @@ public class Main {
                         int id = userIn.epicId();
                         if (manager.getEpics().containsKey(id)) {
                             Epic epic = manager.getEpics().get(id);
-                            HashMap<Integer, SubTask> SubTaskList = epic.getSubTaskList();
-                            manager.removeEpic(epic, SubTaskList);
+                            manager.removeEpic(epic);
                         } else {
                             System.out.println("Эпика с таким номером нет в базе");
                         }
@@ -203,7 +293,7 @@ public class Main {
             } else if (userInput == 6) {         //удалить все задачи, эпики и подзадачи
                 manager.deleteAllTasksAndEpics();
             } else if (userInput == 7) {         //показать историю просмотров задач
-                System.out.println(manager.history());
+                printHistory();
             } else {
                 System.out.println("Извините, такой команды нет");
             }
@@ -211,6 +301,12 @@ public class Main {
             userInput = scanner.nextInt();
         }
         System.out.println("Программа завершена");
+    }
+
+    private static void printHistory() {
+        for (Task task: manager.history()) {
+            System.out.println(task);
+        }
     }
 
     private static void printMenu() {
@@ -232,5 +328,4 @@ public class Main {
         System.out.println("3 - Подзадача");
         System.out.println("0 - Выйти");
     }
-
 }

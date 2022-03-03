@@ -3,12 +3,9 @@ import TaskStructure.Task;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
-    private final List<Task> historyList = new ArrayList<>();
 
     private final Map<Integer, Node<Task>> mapHistory = new HashMap<>();
 
@@ -37,17 +34,20 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void removeNode(Node<Task> node) {
 
-        if (node.prevNode == null) {
-            firstNode = node.nextNode;
+        final Node<Task> next = node.nextNode;
+        final Node<Task> prev = node.prevNode;
+
+        if (prev == null) {
+            firstNode = next;
         } else {
-            node.prevNode.nextNode = node.nextNode;
+            prev.nextNode = next;
             node.prevNode = null;
         }
 
-        if (node.nextNode == null) {
-            lastNode = node.prevNode;
+        if (next == null) {
+            lastNode = prev;
         } else {
-            node.nextNode.prevNode = node.prevNode;
+            next.prevNode = prev;
             node.nextNode = null;
         }
 
@@ -55,7 +55,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public List<Task> getTasks() {
-        historyList.clear();
+        List<Task> historyList = new ArrayList<>();
         Node<Task> node = firstNode;
         while (node != null) {
             historyList.add(node.task);
@@ -89,12 +89,5 @@ public class InMemoryHistoryManager implements HistoryManager {
             removeNode(node);
         }
         mapHistory.clear();
-    }
-
-    @Override
-    public String toString() {
-        return "InMemoryHistoryManager{" +
-                "historyList=" + historyList +
-                '}';
     }
 }

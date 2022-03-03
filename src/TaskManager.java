@@ -34,7 +34,7 @@ public interface TaskManager {
 
     void removeTask(Task task);
 
-    void removeEpic(Epic epic, HashMap<Integer, SubTask> SubTaskList);
+    void removeEpic(Epic epic);
 
     void removeSubTask(SubTask subTask);
 

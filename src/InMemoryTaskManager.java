@@ -79,6 +79,9 @@ public class InMemoryTaskManager implements TaskManager {
 
         Epic epic = subTask.getEpic();
         setStatusEpic(epic);
+
+        HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
+        subTasksEpic.put(subTask.getId(), subTask);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class InMemoryTaskManager implements TaskManager {
         if(tasks.containsKey(id)) {
             Task task = tasks.get(id);
             historyManager.addHistory(task);
-            System.out.println(task);
+            System.out.println("Просмотр: " + task);
         } else {
             System.out.println("Задачи с таким номером нет в базе");
         }
@@ -97,7 +100,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(id)) {
             Epic epic = epics.get(id);
             historyManager.addHistory(epic);
-            System.out.println(epic);
+            System.out.println("Просмотр: " + epic);
         } else {
             System.out.println("Эпика с таким номером нет в базе");
         }
@@ -108,7 +111,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTasks.containsKey(id)) {
             SubTask subTask = subTasks.get(id);
             historyManager.addHistory(subTask);
-            System.out.println(subTask);
+            System.out.println("Просмотр: " + subTask);
         } else {
             System.out.println("Подзадачи с таким номером нет в базе");
         }
@@ -177,19 +180,22 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTask(Task task) {
         tasks.remove(task.getId());
         historyManager.removeHistory(task.getId());
-        System.out.println("Удалили задачу" + task);
+        System.out.println("Удалили задачу " + task);
     }
 
     @Override
-    public void removeEpic(Epic epic, HashMap<Integer, SubTask> subTaskList) {
-            for (Integer i : subTaskList.keySet()) {
-                subTaskList.remove(i);
-                historyManager.removeHistory(i);
-                System.out.println("Удалили подзадачу " + subTaskList.get(i));
-            }
-            epics.remove(epic.getId());
-            historyManager.removeHistory(epic.getId());
-            System.out.println("Удалили эпик " + epic);
+    public void removeEpic(Epic epic) {
+        HashMap<Integer, SubTask> subTasksToDel = epic.getSubTaskList();
+        for (Integer i: subTasksToDel.keySet()) {
+            System.out.println("Удалили подзадачу " + subTasksToDel.get(i));
+            subTasks.remove(i);
+            historyManager.removeHistory(i);
+        }
+
+        subTasksToDel.clear();
+        System.out.println("Удалили эпик " + epic);
+        epics.remove(epic.getId());
+        historyManager.removeHistory(epic.getId());
     }
 
     @Override
