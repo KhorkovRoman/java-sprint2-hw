@@ -10,10 +10,10 @@ public class Main {
     static InMemoryTaskManager manager = Managers.getDefault();
     
     public static void main(String[] args) {
-        testHistory(manager);
+        testHistory();
     }
 
-    private static void testHistory(InMemoryTaskManager manager) {
+    private static void testHistory() {
         Task task1 = new Task(1, "Таск1", "Описание Таск1", TaskStatus.NEW);
         manager.setTask(task1);
         Task task2 = new Task(2, "Таск1", "Описание Таск1", TaskStatus.NEW);
@@ -98,7 +98,7 @@ public class Main {
         System.out.println();
     }
 
-    private static void testMenu(InMemoryTaskManager manager) {
+    private static void testMenu() {
         Scanner scanner = new Scanner(System.in);
         UserIn userIn = new UserIn();
 
@@ -123,21 +123,20 @@ public class Main {
                         int id = manager.generateId();
                         String name = userIn.epicName();
                         String description = userIn.epicDescritpion();
-                        //HashMap<Integer, SubTask> subTasks = manager.getSubTasks();
                         HashMap<Integer, SubTask> subTasks = new HashMap<>();
                         TaskStatus taskStatus = TaskStatus.NEW;
                         Epic epic = new Epic(id, name, description, taskStatus, subTasks);
                         manager.setEpic(epic);
                         break;
                     } else if (userInputSubMenu == 3) { //подзадача
-                        int currentKey = userIn.epicId();
-                        if (manager.getEpics().containsKey(currentKey)) {
+                        int idEpic = userIn.epicId();
+                        if (manager.getEpics().containsKey(idEpic)) {
                             int id = manager.generateId();
                             String name = userIn.subTaskName();
                             String description = userIn.subTaskDescritpion();
                             TaskStatus taskStatus = TaskStatus.NEW;
-                            Epic currentEpic = manager.getEpics().get(currentKey);
-                            SubTask subTask = new SubTask(id, name, description, taskStatus, currentEpic);
+                            Epic epic = manager.getEpics().get(idEpic);
+                            SubTask subTask = new SubTask(id, name, description, taskStatus, epic);
                             manager.setSubTasks(subTask);
                             break;
                         } else {
