@@ -3,24 +3,44 @@ import TaskStructure.SubTask;
 import TaskStructure.Task;
 import TaskStructure.TaskStatus;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Main {
     static InMemoryTaskManager manager = Managers.getDefault();
-    
-    public static void main(String[] args) {
-        testHistory();
-    }
+
+    //private static final String HOME = "C:\\Users\\Роман\\dev\\java-sprint2-hw";
+//    private static final String HOME = Paths.get(".//tasksFile.csv").toAbsolutePath().toString();
+//
+//    public static void main(String[] args) {
+//
+//        try {
+//            Path testFile = Files.createFile(Paths.get(HOME));
+//        } catch (IOException e) {
+//            System.out.println("Файл не создан.");
+//        }
+//
+//        if (Files.exists(Paths.get(HOME))) {
+//            System.out.println("Файл успешно создан.");
+//        }
+//
+//        //testHistory();
+//    }
 
     private static void testHistory() {
         Task task1 = new Task(1, "Таск1", "Описание Таск1", TaskStatus.NEW);
         manager.setTask(task1);
-        Task task2 = new Task(2, "Таск1", "Описание Таск1", TaskStatus.NEW);
+        Task task2 = new Task(2, "Таск2", "Описание Таск2", TaskStatus.NEW);
         manager.setTask(task2);
 
-        HashMap<Integer, SubTask> subTasks1 = new HashMap<>();
-        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW, subTasks1);
+        HashMap<Integer, SubTask> mapSubTasks1 = new HashMap<>();
+        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW, mapSubTasks1);
         manager.setEpic(epic1);
 
         SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW, epic1);
@@ -30,8 +50,8 @@ public class Main {
         SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW, epic1);
         manager.setSubTasks(subTask3);
 
-        HashMap<Integer, SubTask> subTasks2 = new HashMap<>();
-        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW, subTasks2);
+        HashMap<Integer, SubTask> mapSubTasks2 = new HashMap<>();
+        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW, mapSubTasks2);
         manager.setEpic(epic2);
         System.out.println();
 
