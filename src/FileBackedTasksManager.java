@@ -67,7 +67,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (Task task : manager1.history()) {
             System.out.print(task.getId() + ",");
         }
-        //ывафыавфывафв
+
     }
 
     private static FileBackedTasksManager loadFromFile(File file) {
