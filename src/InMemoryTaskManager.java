@@ -73,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void setSubTasks(SubTask subTask) {
+    public void setSubTask(SubTask subTask) {
         subTasks.put(subTask.getId(), subTask);
         System.out.println("Создали подзадачу " + subTask);
 
@@ -82,6 +82,24 @@ public class InMemoryTaskManager implements TaskManager {
 
         HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
         subTasksEpic.put(subTask.getId(), subTask);
+    }
+
+    public void getTaskById(int id) {
+        if(tasks.containsKey(id)) {
+            Task task = tasks.get(id);
+            historyManager.addHistory(task);
+            System.out.println("Просмотр: " + task);
+        }
+        if (epics.containsKey(id)) {
+            Epic epic = epics.get(id);
+            historyManager.addHistory(epic);
+            System.out.println("Просмотр: " + epic);
+        }
+        if (subTasks.containsKey(id)) {
+            SubTask subTask = subTasks.get(id);
+            historyManager.addHistory(subTask);
+            System.out.println("Просмотр: " + subTask);
+        }
     }
 
     @Override

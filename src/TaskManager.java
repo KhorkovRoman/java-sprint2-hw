@@ -14,7 +14,7 @@ public interface TaskManager {
 
     void setEpic(Epic epic);
 
-    void setSubTasks(SubTask subTask);
+    void setSubTask(SubTask subTask);
 
     void getTask(int id);
 

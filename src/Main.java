@@ -44,11 +44,11 @@ public class Main {
         manager.setEpic(epic1);
 
         SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW, epic1);
-        manager.setSubTasks(subTask1);
+        manager.setSubTask(subTask1);
         SubTask subTask2 = new SubTask(5, "СабТаск2", "Описание СабТаск2", TaskStatus.NEW, epic1);
-        manager.setSubTasks(subTask2);
+        manager.setSubTask(subTask2);
         SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW, epic1);
-        manager.setSubTasks(subTask3);
+        manager.setSubTask(subTask3);
 
         HashMap<Integer, SubTask> mapSubTasks2 = new HashMap<>();
         Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW, mapSubTasks2);
@@ -157,7 +157,7 @@ public class Main {
                             TaskStatus taskStatus = TaskStatus.NEW;
                             Epic epic = manager.getEpics().get(idEpic);
                             SubTask subTask = new SubTask(id, name, description, taskStatus, epic);
-                            manager.setSubTasks(subTask);
+                            manager.setSubTask(subTask);
                             break;
                         } else {
                             System.out.println("Эпика с таким номером нет в базе");
