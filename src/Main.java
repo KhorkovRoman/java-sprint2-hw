@@ -39,8 +39,8 @@ public class Main {
         Task task2 = new Task(2, "Таск2", "Описание Таск2", TaskStatus.NEW);
         manager.setTask(task2);
 
-        HashMap<Integer, SubTask> mapSubTasks1 = new HashMap<>();
-        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW, mapSubTasks1);
+        //HashMap<Integer, SubTask> mapSubTasks1 = new HashMap<>();
+        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW);
         manager.setEpic(epic1);
 
         SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW, epic1);
@@ -50,8 +50,8 @@ public class Main {
         SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW, epic1);
         manager.setSubTask(subTask3);
 
-        HashMap<Integer, SubTask> mapSubTasks2 = new HashMap<>();
-        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW, mapSubTasks2);
+        //HashMap<Integer, SubTask> mapSubTasks2 = new HashMap<>();
+        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW);
         manager.setEpic(epic2);
         System.out.println();
 
@@ -145,7 +145,7 @@ public class Main {
                         String description = userIn.epicDescritpion();
                         HashMap<Integer, SubTask> subTasks = new HashMap<>();
                         TaskStatus taskStatus = TaskStatus.NEW;
-                        Epic epic = new Epic(id, name, description, taskStatus, subTasks);
+                        Epic epic = new Epic(id, name, description, taskStatus);
                         manager.setEpic(epic);
                         break;
                     } else if (userInputSubMenu == 3) { //подзадача

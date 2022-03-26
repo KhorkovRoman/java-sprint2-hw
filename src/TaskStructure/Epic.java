@@ -9,19 +9,14 @@ public class Epic extends Task {
     public Epic(Integer id,
                 String name,
                 String description,
-                TaskStatus taskStatus,
-                HashMap<Integer, SubTask> subTaskList) {
+                TaskStatus taskStatus) {
 
         super(id, name, description, taskStatus);
-        this.subTaskList = subTaskList;
+        this.subTaskList = new HashMap<>();
     }
 
     public HashMap<Integer, SubTask> getSubTaskList() {
         return subTaskList;
-    }
-
-    public void setSubTaskList(HashMap<Integer, SubTask> subTaskList) {
-        this.subTaskList = subTaskList;
     }
 
     @Override
