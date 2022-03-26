@@ -7,9 +7,9 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private HashMap<Integer, Task> taskMap = new HashMap<>();
+    private HashMap<Integer, Epic> epicMap = new HashMap<>();
+    private HashMap<Integer, SubTask> subTaskMap = new HashMap<>();
 
     private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -23,28 +23,28 @@ public class InMemoryTaskManager implements TaskManager {
         this.id = id;
     }
 
-    public HashMap<Integer, Task> getTasks() {
-        return tasks;
+    public HashMap<Integer, Task> getTaskMap() {
+        return taskMap;
     }
 
-    public void setTasks(HashMap<Integer, Task> tasks) {
-        this.tasks = tasks;
+    public void setTaskMap(HashMap<Integer, Task> taskMap) {
+        this.taskMap = taskMap;
     }
 
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public HashMap<Integer, Epic> getEpicMap() {
+        return epicMap;
     }
 
-    public void setEpics(HashMap<Integer, Epic> epics) {
-        this.epics = epics;
+    public void setEpicMap(HashMap<Integer, Epic> epicMap) {
+        this.epicMap = epicMap;
     }
 
-    public HashMap<Integer, SubTask> getSubTasks() {
-        return subTasks;
+    public HashMap<Integer, SubTask> getSubTaskMap() {
+        return subTaskMap;
     }
 
-    public void setSubTasks(HashMap<Integer, SubTask> subTasks) {
-        this.subTasks = subTasks;
+    public void setSubTaskMap(HashMap<Integer, SubTask> subTaskMap) {
+        this.subTaskMap = subTaskMap;
     }
 
     public InMemoryHistoryManager getHistoryManager() {
@@ -61,25 +61,25 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void setTask(Task task) {
-        if (!tasks.containsKey(task.getId())) {
-            tasks.put(task.getId(), task);
+    public void addTask(Task task) {
+        if (!taskMap.containsKey(task.getId())) {
+            taskMap.put(task.getId(), task);
             System.out.println("Создали: " + task);
         }
     }
 
     @Override
-    public void setEpic(Epic epic) {
-        if (!epics.containsKey(epic.getId())) {
-            epics.put(epic.getId(), epic);
+    public void addEpic(Epic epic) {
+        if (!epicMap.containsKey(epic.getId())) {
+            epicMap.put(epic.getId(), epic);
             System.out.println("Создали: " + epic);
         }
     }
 
     @Override
-    public void setSubTask(SubTask subTask) {
-        if (!subTasks.containsKey(subTask.getId())) {
-            subTasks.put(subTask.getId(), subTask);
+    public void addSubTask(SubTask subTask) {
+        if (!subTaskMap.containsKey(subTask.getId())) {
+            subTaskMap.put(subTask.getId(), subTask);
             System.out.println("Создали: " + subTask);
 
             Epic epic = subTask.getEpic();
@@ -91,28 +91,28 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void getTaskById(int id) {
-        if(tasks.containsKey(id)) {
-            Task task = tasks.get(id);
-            historyManager.addHistory(task);
+        if(taskMap.containsKey(id)) {
+            Task task = taskMap.get(id);
+            historyManager.addToHistory(task);
             System.out.println("Просмотр: " + task);
         }
-        if (epics.containsKey(id)) {
-            Epic epic = epics.get(id);
-            historyManager.addHistory(epic);
+        if (epicMap.containsKey(id)) {
+            Epic epic = epicMap.get(id);
+            historyManager.addToHistory(epic);
             System.out.println("Просмотр: " + epic);
         }
-        if (subTasks.containsKey(id)) {
-            SubTask subTask = subTasks.get(id);
-            historyManager.addHistory(subTask);
+        if (subTaskMap.containsKey(id)) {
+            SubTask subTask = subTaskMap.get(id);
+            historyManager.addToHistory(subTask);
             System.out.println("Просмотр: " + subTask);
         }
     }
 
     @Override
     public void getTask(int id) {
-        if(tasks.containsKey(id)) {
-            Task task = tasks.get(id);
-            historyManager.addHistory(task);
+        if(taskMap.containsKey(id)) {
+            Task task = taskMap.get(id);
+            historyManager.addToHistory(task);
             System.out.println("Просмотр: " + task);
         } else {
             System.out.println("Задачи с таким номером нет в базе");
@@ -121,9 +121,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void getEpic(int id) {
-        if (epics.containsKey(id)) {
-            Epic epic = epics.get(id);
-            historyManager.addHistory(epic);
+        if (epicMap.containsKey(id)) {
+            Epic epic = epicMap.get(id);
+            historyManager.addToHistory(epic);
             System.out.println("Просмотр: " + epic);
         } else {
             System.out.println("Эпика с таким номером нет в базе");
@@ -132,9 +132,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void getSubTask(int id) {
-        if (subTasks.containsKey(id)) {
-            SubTask subTask = subTasks.get(id);
-            historyManager.addHistory(subTask);
+        if (subTaskMap.containsKey(id)) {
+            SubTask subTask = subTaskMap.get(id);
+            historyManager.addToHistory(subTask);
             System.out.println("Просмотр: " + subTask);
         } else {
             System.out.println("Подзадачи с таким номером нет в базе");
@@ -143,19 +143,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        tasks.put(task.getId(), task);
+        taskMap.put(task.getId(), task);
         System.out.println("Обновили задачу " + task);
     }
 
     @Override
     public void updateEpic(Epic epic) {
-        tasks.put(epic.getId(), epic);
+        taskMap.put(epic.getId(), epic);
         System.out.println("Обновили эпик " + epic);
     }
 
     @Override
     public void updateSubTask(SubTask subTask) {
-        tasks.put(subTask.getId(), subTask);
+        taskMap.put(subTask.getId(), subTask);
         System.out.println("Обновили подзадачу " + subTask);
 
         Epic epic = subTask.getEpic();
@@ -202,8 +202,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTask(Task task) {
-        tasks.remove(task.getId());
-        historyManager.removeHistory(task.getId());
+        taskMap.remove(task.getId());
+        historyManager.removeFromHistory(task.getId());
         System.out.println("Удалили задачу " + task);
     }
 
@@ -212,31 +212,31 @@ public class InMemoryTaskManager implements TaskManager {
         HashMap<Integer, SubTask> subTasksToDel = epic.getSubTaskList();
         for (Integer i: subTasksToDel.keySet()) {
             System.out.println("Удалили подзадачу " + subTasksToDel.get(i));
-            subTasks.remove(i);
-            historyManager.removeHistory(i);
+            subTaskMap.remove(i);
+            historyManager.removeFromHistory(i);
         }
 
         subTasksToDel.clear();
         System.out.println("Удалили эпик " + epic);
-        epics.remove(epic.getId());
-        historyManager.removeHistory(epic.getId());
+        epicMap.remove(epic.getId());
+        historyManager.removeFromHistory(epic.getId());
     }
 
     @Override
     public void removeSubTask(SubTask subTask) {
-        subTasks.remove(subTask.getId());
-        historyManager.removeHistory(subTask.getId());
+        subTaskMap.remove(subTask.getId());
+        historyManager.removeFromHistory(subTask.getId());
         System.out.println("Удалили подзадачу " + subTask);
 
-        Epic currentEpic = subTask.getEpic();
-        setStatusEpic(currentEpic);
+        Epic epic = subTask.getEpic();
+        setStatusEpic(epic);
     }
 
     @Override
-    public void deleteAllTasksAndEpics() {
-        tasks.clear();
-        epics.clear();
-        subTasks.clear();
+    public void deleteTasksEpicsSubTasks() {
+        taskMap.clear();
+        epicMap.clear();
+        subTaskMap.clear();
         historyManager.clearHistory();
         System.out.println("Удалили все задачи, эпики и подзадачи");
     }
@@ -244,16 +244,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void printTasks() {
         System.out.println("Список задач.");
-        for (Integer i : tasks.keySet()) {
-            System.out.println(tasks.get(i));
+        for (Integer i : taskMap.keySet()) {
+            System.out.println(taskMap.get(i));
         }
     }
 
     @Override
     public void printEpics() {
         System.out.println("Список эпиков.");
-        for (Integer i : epics.keySet()) {
-            System.out.println(epics.get(i));
+        for (Integer i : epicMap.keySet()) {
+            System.out.println(epicMap.get(i));
         }
     }
 
@@ -261,7 +261,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void printSubTasks(Epic epic) {
         System.out.println("Список подзадач.");
         for (Integer i : epic.getSubTaskList().keySet()) {
-            SubTask subTask = subTasks.get(i);
+            SubTask subTask = subTaskMap.get(i);
             if (subTask.getEpic().equals(epic)) {
                 System.out.println(subTask);
             }

@@ -10,11 +10,11 @@ public interface TaskManager {
 
     Integer generateId();
 
-    void setTask(Task task);
+    void addTask(Task task);
 
-    void setEpic(Epic epic);
+    void addEpic(Epic epic);
 
-    void setSubTask(SubTask subTask);
+    void addSubTask(SubTask subTask);
 
     void getTask(int id);
 
@@ -46,5 +46,5 @@ public interface TaskManager {
 
     List<Task> history();
 
-    void deleteAllTasksAndEpics();
+    void deleteTasksEpicsSubTasks();
 }

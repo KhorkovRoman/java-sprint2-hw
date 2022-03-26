@@ -7,17 +7,17 @@ import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final Map<Integer, Node<Task>> mapHistory = new HashMap<>();
+    private final Map<Integer, Node<Task>> historyMap = new HashMap<>();
 
     private Node<Task> firstNode;
     private Node<Task> lastNode;
 
-    private void linkLast(Task task) {
+    private void addNode(Task task) {
 
-        if (mapHistory.containsKey(task.getId())) {
-            Node<Task> node = mapHistory.get(task.getId());
+        if (historyMap.containsKey(task.getId())) {
+            Node<Task> node = historyMap.get(task.getId());
             removeNode(node);
-            mapHistory.remove(task.getId());
+            historyMap.remove(task.getId());
         }
 
         Node<Task> oldLastNode = lastNode;
@@ -29,7 +29,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             oldLastNode.nextNode = newNode;
         }
 
-        mapHistory.put(task.getId(), newNode);
+        historyMap.put(task.getId(), newNode);
     }
 
     private void removeNode(Node<Task> node) {
@@ -70,24 +70,24 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void addHistory(Task task) {
-        linkLast(task);
+    public void addToHistory(Task task) {
+        addNode(task);
     }
 
     @Override
-    public void removeHistory(int id) {
-        if (mapHistory.containsKey(id)) {
-            Node<Task> node = mapHistory.get(id);
+    public void removeFromHistory(int id) {
+        if (historyMap.containsKey(id)) {
+            Node<Task> node = historyMap.get(id);
             removeNode(node);
-            mapHistory.remove(id);
+            historyMap.remove(id);
         }
     }
 
     public void clearHistory() {
-        for (Integer i: mapHistory.keySet()) {
-            Node<Task> node = mapHistory.get(i);
+        for (Integer i: historyMap.keySet()) {
+            Node<Task> node = historyMap.get(i);
             removeNode(node);
         }
-        mapHistory.clear();
+        historyMap.clear();
     }
 }
