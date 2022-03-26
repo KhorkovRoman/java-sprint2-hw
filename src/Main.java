@@ -13,7 +13,7 @@ public class Main {
 //        testHistory();
 //    }
 
-    private static void testHistory() {
+    private static void testHistory() throws ManagerSaveException {
         Task task1 = new Task(1, "Таск1", "Описание Таск1", TaskStatus.NEW);
         manager.setTask(task1);
         Task task2 = new Task(2, "Таск2", "Описание Таск2", TaskStatus.NEW);
@@ -98,7 +98,7 @@ public class Main {
         System.out.println();
     }
 
-    private static void testMenu() {
+    private static void testMenu() throws ManagerSaveException {
         Scanner scanner = new Scanner(System.in);
         UserIn userIn = new UserIn();
 
