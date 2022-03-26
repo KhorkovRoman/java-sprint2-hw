@@ -10,17 +10,17 @@ public interface TaskManager {
 
     Integer generateId();
 
-    void setTask(Task task) throws ManagerSaveException;
+    void setTask(Task task);
 
-    void setEpic(Epic epic) throws ManagerSaveException;
+    void setEpic(Epic epic);
 
-    void setSubTask(SubTask subTask) throws ManagerSaveException;
+    void setSubTask(SubTask subTask);
 
-    void getTask(int id) throws ManagerSaveException;
+    void getTask(int id);
 
-    void getEpic(int id) throws ManagerSaveException;
+    void getEpic(int id);
 
-    void getSubTask(int id) throws ManagerSaveException;
+    void getSubTask(int id);
 
     void updateTask(Task task);
 
