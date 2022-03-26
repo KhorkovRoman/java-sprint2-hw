@@ -3,14 +3,9 @@ import TaskStructure.SubTask;
 import TaskStructure.Task;
 import TaskStructure.TaskStatus;
 
-import java.util.Arrays;
-import javax.swing.*;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -28,7 +23,49 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.tasksFile = tasksFile;
     }
 
-    public static void main(String[] args) throws ManagerSaveException {
+    @Override
+    public void getTaskById(int id) {
+        super.getTaskById(id);
+        save();
+    }
+
+    @Override
+    public void getTask(int id) {
+        super.getTask(id);
+        save();
+    }
+
+    @Override
+    public void getEpic(int id) {
+        super.getEpic(id);
+        save();
+    }
+
+    @Override
+    public void getSubTask(int id) {
+        super.getSubTask(id);
+        save();
+    }
+
+    @Override
+    public void setTask(Task task) {
+        super.setTask(task);
+        save();
+    }
+
+    @Override
+    public void setEpic(Epic epic) {
+        super.setEpic(epic);
+        save();
+    }
+
+    @Override
+    public void setSubTask(SubTask subTask) {
+        super.setSubTask(subTask);
+        save();
+    }
+
+    public static void main(String[] args) {
 
         System.out.println("Вывод менеджер:");
         TaskManager manager = loadFromFile(new File("tasksFile.csv"));
@@ -99,7 +136,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     manager.setSubTask(new SubTask(Integer.parseInt(lineArray[0]), lineArray[2], lineArray[4],
                             TaskStatus.valueOf(lineArray[3]), epic));
                 }
-
             }
 
             String historyLine = br.readLine();
@@ -113,48 +149,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
 
         return manager;
-    }
-
-    @Override
-    public void getTaskById(int id) {
-        super.getTaskById(id);
-        save();
-    }
-
-    @Override
-    public void getTask(int id) {
-        super.getTask(id);
-        save();
-    }
-
-    @Override
-    public void getEpic(int id) {
-        super.getEpic(id);
-        save();
-    }
-
-    @Override
-    public void getSubTask(int id) {
-        super.getSubTask(id);
-        save();
-    }
-
-    @Override
-    public void setTask(Task task) {
-        super.setTask(task);
-        save();
-    }
-
-    @Override
-    public void setEpic(Epic epic) {
-        super.setEpic(epic);
-        save();
-    }
-
-    @Override
-    public void setSubTask(SubTask subTask) {
-        super.setSubTask(subTask);
-            save();
     }
 
     public String taskToString(Task task) {
