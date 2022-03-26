@@ -70,7 +70,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private static FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
+    private static FileBackedTasksManager loadFromFile(File file) {
 
         FileBackedTasksManager manager = new FileBackedTasksManager(file.toString());
         try (FileReader fr = new FileReader(file)) {
@@ -109,7 +109,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
 
         } catch (IOException e) {
-            throw new ManagerSaveException("Файл не прочитал.");
+            System.out.println("Файл не прочитан. Будет создан пустой менеджер.");
         }
 
         return manager;
@@ -118,71 +118,43 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void getTaskById(int id) {
         super.getTaskById(id);
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        save();
     }
 
     @Override
     public void getTask(int id) {
         super.getTask(id);
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        save();
     }
 
     @Override
     public void getEpic(int id) {
         super.getEpic(id);
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        save();
     }
 
     @Override
     public void getSubTask(int id) {
         super.getSubTask(id);
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        save();
     }
 
     @Override
     public void setTask(Task task) {
         super.setTask(task);
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        save();
     }
 
     @Override
     public void setEpic(Epic epic) {
         super.setEpic(epic);
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
+        save();
     }
 
     @Override
     public void setSubTask(SubTask subTask) {
         super.setSubTask(subTask);
-        try {
             save();
-        } catch (ManagerSaveException e) {
-            e.printStackTrace();
-        }
     }
 
     public String taskToString(Task task) {
@@ -201,7 +173,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 "," + subTask.getEpic().getId();
     }
 
-    public void save() throws ManagerSaveException {
+    public void save() {
 
         try (FileWriter fileWriter = new FileWriter("tasksFile.csv", StandardCharsets.UTF_8)) {
             fileWriter.write("id,type,name,status,description,epic\n");
