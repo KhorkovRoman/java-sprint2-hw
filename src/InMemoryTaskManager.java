@@ -83,10 +83,10 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Создали: " + subTask);
 
             Epic epic = subTask.getEpic();
-            setStatusEpic(epic);
-
             HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
             subTasksEpic.put(subTask.getId(), subTask);
+
+            setStatusEpic(epic);
         }
     }
 
