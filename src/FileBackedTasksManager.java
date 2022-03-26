@@ -32,7 +32,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         TaskManager manager = loadFromFile(new File("tasksFile.csv"));
 
-        System.out.println("Вывод менеджер:");
         Task task1 = new Task(1, "Task1", "Description Task1", TaskStatus.NEW);
         manager.setTask(task1);
         Task task2 = new Task(2, "Task2", "Description Task2", TaskStatus.NEW);
@@ -45,15 +44,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.setSubTask(subTask1);
         SubTask subTask2 = new SubTask(5, "SubTask2", "Description SubTask2", TaskStatus.NEW, epic1);
         manager.setSubTask(subTask2);
-        SubTask subTask3 = new SubTask(6, "SubTask3", "Description SubTask3", TaskStatus.NEW, epic1);
+        SubTask subTask3 = new SubTask(6, "SubTask3", "Description SubTask3", TaskStatus.DONE, epic1);
         manager.setSubTask(subTask3);
 
         Epic epic2 = new Epic(7, "Epic2", "Description Epic2", TaskStatus.NEW);
         manager.setEpic(epic2);
 
-        manager.getTask(1);
-        manager.getEpic(3);
-        manager.getSubTask(6);
+        if (manager.history().isEmpty()) {
+            manager.getTask(1);
+            manager.getEpic(3);
+            manager.getSubTask(6);
+        }
 
         for (Task task : manager.history()) {
             System.out.print(task.getId() + ",");

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private HashMap<Integer, SubTask> subTaskList;
+    private final HashMap<Integer, SubTask> subTaskList;
 
     public Epic(Integer id,
                 String name,
@@ -46,7 +46,6 @@ public class Epic extends Task {
                 ", name='" + super.getName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
                 ", status='" + super.getTaskStatus() + '\'' +
-                ", subTaskList =" + subTaskList.toString() +
                 '}';
     }
 }

@@ -62,26 +62,32 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setTask(Task task) {
-        tasks.put(task.getId(), task);
-        System.out.println("Создали задачу " + task);
+        if (!tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+            System.out.println("Создали: " + task);
+        }
     }
 
     @Override
     public void setEpic(Epic epic) {
-        epics.put(epic.getId(), epic);
-        System.out.println("Создали эпик " + epic);
+        if (!epics.containsKey(epic.getId())) {
+            epics.put(epic.getId(), epic);
+            System.out.println("Создали: " + epic);
+        }
     }
 
     @Override
     public void setSubTask(SubTask subTask) {
-        subTasks.put(subTask.getId(), subTask);
-        System.out.println("Создали подзадачу " + subTask);
+        if (!subTasks.containsKey(subTask.getId())) {
+            subTasks.put(subTask.getId(), subTask);
+            System.out.println("Создали: " + subTask);
 
-        Epic epic = subTask.getEpic();
-        setStatusEpic(epic);
+            Epic epic = subTask.getEpic();
+            setStatusEpic(epic);
 
-        HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
-        subTasksEpic.put(subTask.getId(), subTask);
+            HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
+            subTasksEpic.put(subTask.getId(), subTask);
+        }
     }
 
     public void getTaskById(int id) {

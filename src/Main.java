@@ -3,34 +3,14 @@ import TaskStructure.SubTask;
 import TaskStructure.Task;
 import TaskStructure.TaskStatus;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main {
     static InMemoryTaskManager manager = Managers.getDefault();
 
-    //private static final String HOME = "C:\\Users\\Роман\\dev\\java-sprint2-hw";
-//    private static final String HOME = Paths.get(".//tasksFile.csv").toAbsolutePath().toString();
-//
 //    public static void main(String[] args) {
-//
-//        try {
-//            Path testFile = Files.createFile(Paths.get(HOME));
-//        } catch (IOException e) {
-//            System.out.println("Файл не создан.");
-//        }
-//
-//        if (Files.exists(Paths.get(HOME))) {
-//            System.out.println("Файл успешно создан.");
-//        }
-//
-//        //testHistory();
+//        testHistory();
 //    }
 
     private static void testHistory() {
