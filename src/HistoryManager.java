@@ -10,4 +10,5 @@ public interface HistoryManager {
 
     void removeFromHistory(int id);
 
+    void clearHistory();
 }

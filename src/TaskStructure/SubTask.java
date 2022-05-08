@@ -1,12 +1,20 @@
 package TaskStructure;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class SubTask extends Task {
     private Epic epic;
 
-    public SubTask(Integer id, String name, String description, TaskStatus taskStatus, Epic epic) {
-        super(id, name, description, taskStatus);
+    public SubTask(Integer id,
+                   String name,
+                   String description,
+                   TaskStatus taskStatus,
+                   LocalDateTime startTime,
+                   int duration,
+                   Epic epic) {
+        super(id, name, description, taskStatus, startTime, duration);
         this.epic = epic;
     }
 
@@ -45,6 +53,8 @@ public class SubTask extends Task {
                 ", name='" + super.getName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
                 ", status='" + super.getTaskStatus() + '\'' +
+                ", start='" + super.getStartTime() + '\'' +
+                ", duration='" + super.getDuration() + '\'' +
                 ", epic=" + epic.getId() +
                 '}';
     }

@@ -9,6 +9,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private final Map<Integer, Node<Task>> historyMap = new HashMap<>();
 
+    public Map<Integer, Node<Task>> getHistoryMap() {
+        return historyMap;
+    }
+
     private Node<Task> firstNode;
     private Node<Task> lastNode;
 
@@ -54,7 +58,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         node.task = null;
     }
 
-    public List<Task> getTasks() {
+    @Override
+    public List<Task> getHistory() {
         List<Task> historyList = new ArrayList<>();
         Node<Task> node = firstNode;
         while (node != null) {
@@ -62,11 +67,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             node = node.nextNode;
         }
         return historyList;
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return getTasks();
     }
 
     @Override
@@ -83,6 +83,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
+    @Override
     public void clearHistory() {
         for (Integer i: historyMap.keySet()) {
             Node<Task> node = historyMap.get(i);

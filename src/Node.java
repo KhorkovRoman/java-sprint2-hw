@@ -10,4 +10,8 @@ public class Node<T> {
         this.task = task;
         this.nextNode = nextNode;
     }
+
+    public Task getTask() {
+        return task;
+    }
 }

@@ -3,6 +3,9 @@ import TaskStructure.SubTask;
 import TaskStructure.Task;
 import TaskStructure.TaskStatus;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -14,24 +17,29 @@ public class Main {
 //    }
 
     private static void testHistory() throws ManagerSaveException {
-        Task task1 = new Task(1, "Таск1", "Описание Таск1", TaskStatus.NEW);
+        Task task1 = new Task(1, "Таск1", "Описание Таск1", TaskStatus.NEW,
+                LocalDateTime.of(2022, Month.APRIL, 26, 10, 00), 1);
         manager.addTask(task1);
-        Task task2 = new Task(2, "Таск2", "Описание Таск2", TaskStatus.NEW);
+        Task task2 = new Task(2, "Таск2", "Описание Таск2", TaskStatus.NEW,
+                LocalDateTime.of(2022, Month.APRIL, 26, 12, 00), 1);
         manager.addTask(task2);
 
-        //HashMap<Integer, SubTask> mapSubTasks1 = new HashMap<>();
-        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW);
+        Epic epic1 = new Epic(3, "Эпик1", "Описание Эпик1", TaskStatus.NEW,
+                null, 0);
         manager.addEpic(epic1);
 
-        SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW, epic1);
+        SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW,
+                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, epic1);
         manager.addSubTask(subTask1);
-        SubTask subTask2 = new SubTask(5, "СабТаск2", "Описание СабТаск2", TaskStatus.NEW, epic1);
+        SubTask subTask2 = new SubTask(5, "СабТаск2", "Описание СабТаск2", TaskStatus.NEW,
+                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, epic1);
         manager.addSubTask(subTask2);
-        SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW, epic1);
+        SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW,
+                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, epic1);
         manager.addSubTask(subTask3);
 
-        //HashMap<Integer, SubTask> mapSubTasks2 = new HashMap<>();
-        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW);
+        Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW,
+                null, 0);
         manager.addEpic(epic2);
         System.out.println();
 
@@ -98,6 +106,12 @@ public class Main {
         System.out.println();
     }
 
+    private static void printHistory() {
+        for (Task task: manager.getHistoryList()) {
+            System.out.println(task);
+        }
+    }
+
     private static void testMenu() throws ManagerSaveException {
         Scanner scanner = new Scanner(System.in);
         UserIn userIn = new UserIn();
@@ -105,6 +119,7 @@ public class Main {
         System.out.println("Менеджер задач.");
         printMenu();
         int userInput = scanner.nextInt();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy_HH:mm");
 
         while (userInput != 0) {
             if (userInput == 1) {  //новая
@@ -116,7 +131,9 @@ public class Main {
                         String name = userIn.taskName();
                         String description = userIn.taskDescritpion();
                         TaskStatus taskStatus = TaskStatus.NEW;
-                        Task task = new Task(id, name, description, taskStatus);
+                        LocalDateTime startTime = LocalDateTime.parse(scanner.next(), formatter);
+                        int duration = scanner.nextInt();
+                        Task task = new Task(id, name, description, taskStatus, startTime, duration);
                         manager.addTask(task);
                         break;
                     } else if (userInputSubMenu == 2) {   //эпик
@@ -125,7 +142,10 @@ public class Main {
                         String description = userIn.epicDescritpion();
                         HashMap<Integer, SubTask> subTasks = new HashMap<>();
                         TaskStatus taskStatus = TaskStatus.NEW;
-                        Epic epic = new Epic(id, name, description, taskStatus);
+                        LocalDateTime startTime = null;
+                                //LocalDateTime.of(1990,10,10,10,10);
+                        int duration = 0;
+                        Epic epic = new Epic(id, name, description, taskStatus, startTime, duration);
                         manager.addEpic(epic);
                         break;
                     } else if (userInputSubMenu == 3) { //подзадача
@@ -135,8 +155,10 @@ public class Main {
                             String name = userIn.subTaskName();
                             String description = userIn.subTaskDescritpion();
                             TaskStatus taskStatus = TaskStatus.NEW;
+                            LocalDateTime startTime = LocalDateTime.parse(scanner.next(), formatter);
+                            int duration = scanner.nextInt();
                             Epic epic = manager.getEpicMap().get(idEpic);
-                            SubTask subTask = new SubTask(id, name, description, taskStatus, epic);
+                            SubTask subTask = new SubTask(id, name, description, taskStatus, startTime, duration, epic);
                             manager.addSubTask(subTask);
                             break;
                         } else {
@@ -302,11 +324,7 @@ public class Main {
         System.out.println("Программа завершена");
     }
 
-    private static void printHistory() {
-        for (Task task: manager.history()) {
-            System.out.println(task);
-        }
-    }
+
 
     private static void printMenu() {
         System.out.println("Что вы хотите сделать?");
