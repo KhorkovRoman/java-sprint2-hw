@@ -10,6 +10,14 @@ public interface TaskManager {
 
     Integer generateId();
 
+    Integer getId();
+
+    HashMap<Integer, Task> getTaskMap();
+
+    HashMap<Integer, Epic> getEpicMap();
+
+    HashMap<Integer, SubTask> getSubTaskMap();
+
     void addTask(Task task);
 
     void addEpic(Epic epic);

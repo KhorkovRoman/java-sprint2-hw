@@ -5,25 +5,19 @@ import TaskStructure.TaskStatus;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
-    FileBackedTasksManager fileManager = new FileBackedTasksManager("tasksFile.csv");
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
-    HashMap<Integer, Task> taskMap = taskManager.getTaskMap();
-    HashMap<Integer, Epic> epicMap = taskManager.getEpicMap();
-    HashMap<Integer, SubTask> subTaskMap = taskManager.getSubTaskMap();
+    T taskManager;
 
-    InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-    Map<Integer, Node<Task>> historyMap = historyManager.getHistoryMap();
+    abstract void setManager();
 
     static Task task1 = new Task(1, "Task1", "Task1 description", TaskStatus.NEW,
             LocalDateTime.of(2022, Month.APRIL, 26, 10, 00), 1);
@@ -45,6 +39,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @BeforeEach
     public void addAllTasksEpicsAndSubTasks() {
+        setManager();
+
         taskManager.addTask(task1);
         taskManager.addTask(task2);
         taskManager.addEpic(epic1);
@@ -83,6 +79,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task1, savedTask, "Задачи не совпадают.");
 
+        HashMap<Integer, Task> taskMap = taskManager.getTaskMap();
+
         assertNotNull(taskMap, "Map c задачами не возвращается.");
         assertEquals(2, taskMap.size(), "Неверное количество задач.");
         assertEquals(task1, taskMap.get(task1.getId()), "Задачи не совпадают.");
@@ -99,7 +97,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(savedEpic, "Эпик не найден.");
         assertEquals(epic1, savedEpic, "Эпики не совпадают.");
 
-        assertNotNull(taskMap, "Map c эпиками не возвращается.");
+        HashMap<Integer, Epic> epicMap = taskManager.getEpicMap();
+
+        assertNotNull(epicMap, "Map c эпиками не возвращается.");
         assertEquals(2, epicMap.size(), "Неверное количество эпиков.");
         assertEquals(epic1, epicMap.get(epic1.getId()), "Эпики не совпадают.");
     }
@@ -115,6 +115,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(savedSubTask, "Сабтаск не найден.");
         assertEquals(subTask1, savedSubTask, "Сабтаски не совпадают.");
 
+        HashMap<Integer, SubTask> subTaskMap = taskManager.getSubTaskMap();
+
         assertNotNull(subTaskMap, "Map c сабтасками не возвращается.");
         assertEquals(3, subTaskMap.size(), "Неверное количество сабтасков.");
         assertEquals(subTask1, subTaskMap.get(subTask1.getId()), "Сабтаски не совпадают.");
@@ -123,53 +125,54 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void updateTask() {
         taskManager.updateTask(task1);
+        HashMap<Integer, Task> taskMap = taskManager.getTaskMap();
         assertEquals(task1, taskMap.get(task1.getId()), "Задачи не совпадают.");
     }
 
     @Test
     public void updateEpic() {
         taskManager.updateEpic(epic1);
+        HashMap<Integer, Epic> epicMap = taskManager.getEpicMap();
         assertEquals(epic1, epicMap.get(epic1.getId()), "Эпики не совпадают.");
     }
 
     @Test
     public void updateSubTask() {
         taskManager.updateSubTask(subTask1);
+        HashMap<Integer, SubTask> subTaskMap = taskManager.getSubTaskMap();
         assertEquals(subTask1, subTaskMap.get(subTask1.getId()), "Сабтаски не совпадают.");
     }
 
     @Test
     public void removeTask() {
         taskManager.removeTask(task1);
+        HashMap<Integer, Task> taskMap = taskManager.getTaskMap();
         assertNull(taskMap.get(task1.getId()), "Задача не удалена.");
     }
 
     @Test
     public void removeSubTask() {
         taskManager.removeSubTask(subTask1);
+        HashMap<Integer, SubTask> subTaskMap = taskManager.getSubTaskMap();
         assertNull(subTaskMap.get(subTask1.getId()), "Сабтаск не удален.");
     }
 
     @Test
     public void removeEpic() {
         taskManager.removeEpic(epic1);
+        HashMap<Integer, Epic> epicMap = taskManager.getEpicMap();
         assertNull(epicMap.get(epic1.getId()), "Эпик не удален.");
     }
 
     @Test
     public void deleteTasksEpicsSubTasks() {
         taskManager.deleteTasksEpicsSubTasks();
+        HashMap<Integer, Task> taskMap = taskManager.getTaskMap();
+        HashMap<Integer, Epic> epicMap = taskManager.getEpicMap();
+        HashMap<Integer, SubTask> subTaskMap = taskManager.getSubTaskMap();
 
         assertEquals(0, taskMap.size(), "Список задач не пустой.");
         assertEquals(0, epicMap.size(), "Список эпиков не пустой.");
         assertEquals(0, subTaskMap.size(), "Список сабтасков не пустой.");
-    }
-
-    @Test
-    public void getHistoryList() {
-        List<Task> historyList = taskManager.getHistoryList();
-
-        assertNotNull(historyList, "Список истории не создан.");
-        assertEquals(3, historyList.size(), "История сожержит не 3 задачи.");
     }
 }

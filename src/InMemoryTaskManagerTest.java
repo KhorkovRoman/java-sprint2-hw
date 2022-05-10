@@ -8,9 +8,15 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 import java.util.TreeSet;
 
-public class InMemoryTaskManagerTest extends TaskManagerTest<TaskManager> {
+public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+
+    @Override
+    public void setManager() {
+        taskManager = new InMemoryTaskManager();
+    }
 
     @Test
     public void prioritizedTasksNotEmpty() {
@@ -271,6 +277,14 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<TaskManager> {
     @Test
     public void subTaskMustHaveEpic() {
         assertEquals(epic1, subTask1.getEpic(), "Эпики не совпадают.");
+    }
+
+    @Test
+    public void getHistoryList() {
+        List<Task> historyList = taskManager.getHistoryList();
+
+        assertNotNull(historyList, "Список истории не создан.");
+        assertEquals(3, historyList.size(), "История сожержит не 3 задачи.");
     }
 }
 

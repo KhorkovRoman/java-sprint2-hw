@@ -11,28 +11,33 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 
-public class FileBackedTasksManagerTest extends TaskManagerTest<InMemoryTaskManager>{
+public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>{
+
+    @Override
+    public void setManager() {
+        taskManager = new FileBackedTasksManager("tasksFile.csv");
+    }
 
     @Test
     public void fileManagerNotNullWhithoutFile() {
-        fileManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
-        System.out.println(fileManager);
-        assertNotNull(fileManager, "Менеджер не создан.");
+        taskManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
+        System.out.println(taskManager);
+        assertNotNull(taskManager, "Менеджер не создан.");
     }
 
     @Test
     public void fileManagerEpicWithoutSubTasks() {
         Epic epic1 = new Epic(3, "Epic1", "Epic1 description", TaskStatus.NEW,
                 null, 0);
-        fileManager.addEpic(epic1);
-        fileManager.getEpic(epic1.getId());
+        taskManager.addEpic(epic1);
+        taskManager.getEpic(epic1.getId());
 
-        fileManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
+        taskManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
 
         FileBackedTasksManager fileManagerTest =
                 FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
 
-        assertEquals(fileManager, fileManagerTest, "Менеджеры не равны.");
+        assertEquals(taskManager, fileManagerTest, "Менеджеры не равны.");
     }
 
     @Test
@@ -55,24 +60,24 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<InMemoryTaskMana
         Epic epic2 = new Epic(7, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
 
-        fileManager.addTask(task1);
-        fileManager.addTask(task2);
-        fileManager.addEpic(epic1);
-        fileManager.addSubTask(subTask1);
-        fileManager.addSubTask(subTask2);
-        fileManager.addSubTask(subTask3);
-        fileManager.addEpic(epic2);
+        taskManager.addTask(task1);
+        taskManager.addTask(task2);
+        taskManager.addEpic(epic1);
+        taskManager.addSubTask(subTask1);
+        taskManager.addSubTask(subTask2);
+        taskManager.addSubTask(subTask3);
+        taskManager.addEpic(epic2);
 
-        fileManager.getTask(1);
-        fileManager.getEpic(3);
-        fileManager.getSubTask(6);
+        taskManager.getTask(1);
+        taskManager.getEpic(3);
+        taskManager.getSubTask(6);
 
-        fileManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
+        taskManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
 
         FileBackedTasksManager fileManagerTest =
                 FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
 
-        assertEquals(fileManager, fileManagerTest, "Менеджеры не равны.");
+        assertEquals(taskManager, fileManagerTest, "Менеджеры не равны.");
     }
 
     @Test
@@ -95,20 +100,20 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<InMemoryTaskMana
         Epic epic2 = new Epic(7, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
 
-        fileManager.addTask(task1);
-        fileManager.addTask(task2);
-        fileManager.addEpic(epic1);
-        fileManager.addSubTask(subTask1);
-        fileManager.addSubTask(subTask2);
-        fileManager.addSubTask(subTask3);
-        fileManager.addEpic(epic2);
+        taskManager.addTask(task1);
+        taskManager.addTask(task2);
+        taskManager.addEpic(epic1);
+        taskManager.addSubTask(subTask1);
+        taskManager.addSubTask(subTask2);
+        taskManager.addSubTask(subTask3);
+        taskManager.addEpic(epic2);
 
-        fileManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
+        taskManager = FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
 
         FileBackedTasksManager fileManagerTest =
                 FileBackedTasksManager.loadFromFile(new File("tasksFile.csv"));
 
-        assertEquals(fileManager, fileManagerTest, "Менеджеры не равны.");
+        assertEquals(taskManager, fileManagerTest, "Менеджеры не равны.");
     }
 
 }
