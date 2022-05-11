@@ -92,9 +92,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Epic epic2 = new Epic(7, "Epic2", "Description Epic2", TaskStatus.NEW,
                 null, 0);
 
-        System.out.println("Вывод менеджер:");
         TaskManager taskManager = loadFromFile(new File("tasksFile.csv"));
 
+        System.out.println("Вывод менеджер:");
         taskManager.addTask(task1);
         taskManager.addTask(task2);
         taskManager.addEpic(epic1);
@@ -115,9 +115,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         System.out.println("\n");
 
-        System.out.println("Вывод менеджер Тест:");
         TaskManager taskManager1 = loadFromFile(new File("tasksFile.csv"));
 
+        System.out.println("Вывод менеджер Тест:");
         for (Task task : taskManager1.getHistoryList()) {
             System.out.print(task.getId() + ",");
         }

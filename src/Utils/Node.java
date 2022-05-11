@@ -1,8 +1,6 @@
 package Utils;
 
-import TaskStructure.Task;
-
-public class Node<T> {
+public class Node<Task> {
     public Node<Task> prevNode;
     public Task task;
     public Node<Task> nextNode;
