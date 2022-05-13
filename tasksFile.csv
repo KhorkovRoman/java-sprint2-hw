@@ -1,10 +1,10 @@
 id,type,name,status,description,start-time,duration,epic
-1,TASK,Task1,NEW,Description Task1,2022-04-30T10:00,1
-2,TASK,Task2,NEW,Description Task2,2022-04-26T12:00,1
-3,EPIC,Epic1,IN_PROGRESS,Description Epic1,2022-04-27T12:00,3
-7,EPIC,Epic2,NEW,Description Epic2,null,0
-4,SUBTASK,SubTask1,NEW,Description SubTask1,2022-04-27T12:00,1,3
-5,SUBTASK,SubTask2,NEW,Description SubTask2,2022-04-28T12:00,1,3
-6,SUBTASK,SubTask3,DONE,Description SubTask3,2022-04-29T12:00,1,3
+1,TASK,Task1,NEW,Task1 description,2022-04-26T10:00,1
+2,TASK,Task2,NEW,Task2 description,2022-04-26T12:00,1
+3,EPIC,Epic1,IN_PROGRESS,Epic1 description,2022-04-27T12:00,3
+7,EPIC,Epic2,NEW,Epic2 description,null,0
+4,SUBTASK,SubTask1,NEW,SubTask1 description,2022-04-27T12:00,1,3
+5,SUBTASK,SubTask2,NEW,SubTask2 description,2022-04-28T12:00,1,3
+6,SUBTASK,SubTask3,DONE,SubTask3 description,2022-04-29T12:00,1,3
 
 1,3,6
