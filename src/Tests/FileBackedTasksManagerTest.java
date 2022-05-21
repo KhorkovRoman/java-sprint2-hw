@@ -56,11 +56,11 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
                 null, 0);
 
         SubTask subTask1 = new SubTask(4, "SubTask1", "SubTask1 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, 3);
         SubTask subTask2 = new SubTask(5, "SubTask2", "SubTask2 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, 3);
         SubTask subTask3 = new SubTask(6, "SubTask3", "SubTask3 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, 3);
 
         Epic epic2 = new Epic(7, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
@@ -96,11 +96,11 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
                 null, 0);
 
         SubTask subTask1 = new SubTask(4, "SubTask1", "SubTask1 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, 3);
         SubTask subTask2 = new SubTask(5, "SubTask2", "SubTask2 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, 3);
         SubTask subTask3 = new SubTask(6, "SubTask3", "SubTask3 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, 3);
 
         Epic epic2 = new Epic(7, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);

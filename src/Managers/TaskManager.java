@@ -22,6 +22,8 @@ public interface TaskManager {
 
     TreeSet<Task> getPrioritizedTasks();
 
+    List<Task> getHistoryList();
+
     void addTask(Task task);
 
     void addEpic(Epic epic);
@@ -53,7 +55,4 @@ public interface TaskManager {
     void printEpics();
 
     void printSubTasks(Epic epic);
-
-    List<Task> getHistoryList();
-
 }

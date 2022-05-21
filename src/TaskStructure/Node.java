@@ -1,4 +1,4 @@
-package Utils;
+package TaskStructure;
 
 public class Node<Task> {
     public Node<Task> prevNode;

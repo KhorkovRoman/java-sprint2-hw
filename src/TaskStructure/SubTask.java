@@ -1,11 +1,23 @@
 package TaskStructure;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class SubTask extends Task {
-    private Epic epic;
+//    private Epic epic;
+//
+//    public SubTask(Integer id,
+//                   String name,
+//                   String description,
+//                   TaskStatus taskStatus,
+//                   LocalDateTime startTime,
+//                   int duration,
+//                   Epic epic) {
+//        super(id, name, description, taskStatus, startTime, duration);
+//        this.epic = epic;
+//    }
+
+    private Integer epicId;
 
     public SubTask(Integer id,
                    String name,
@@ -13,17 +25,17 @@ public class SubTask extends Task {
                    TaskStatus taskStatus,
                    LocalDateTime startTime,
                    int duration,
-                   Epic epic) {
+                   Integer epicId) {
         super(id, name, description, taskStatus, startTime, duration);
-        this.epic = epic;
+        this.epicId = epicId;
     }
 
-    public Epic getEpic() {
-        return epic;
+    public Integer getEpicId() {
+        return epicId;
     }
 
-    public void setEpic(Epic epic) {
-        this.epic = epic;
+    public void setEpicId(Integer epicId) {
+        this.epicId = epicId;
     }
 
     @Override
@@ -38,12 +50,12 @@ public class SubTask extends Task {
             return false;
         }
         SubTask subTask = (SubTask) o;
-        return Objects.equals(epic, subTask.epic);
+        return Objects.equals(epicId, subTask.epicId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), epic);
+        return Objects.hash(super.hashCode(), epicId);
     }
 
     @Override
@@ -55,7 +67,7 @@ public class SubTask extends Task {
                 ", status='" + super.getTaskStatus() + '\'' +
                 ", start='" + super.getStartTime() + '\'' +
                 ", duration='" + super.getDuration() + '\'' +
-                ", epic=" + epic.getId() +
+                ", epic=" + epicId +
                 '}';
     }
 }

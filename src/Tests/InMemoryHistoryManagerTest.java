@@ -1,6 +1,6 @@
 package Tests;
 
-import Utils.Node;
+import TaskStructure.Node;
 import Managers.InMemoryHistoryManager;
 
 import TaskStructure.Task;

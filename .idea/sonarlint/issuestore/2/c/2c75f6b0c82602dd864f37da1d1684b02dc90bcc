@@ -1,0 +1,8 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ãèéÆ
+C
+java:S1185"(Remove this method to simply inherit it.(à§ÏÑýÿÿÿÿ
+h
+java:S3776M"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(•õº¸
+g
+java:S2677S"LUse or store the value returned from "readLine" instead of throwing it away.(†²ç÷úÿÿÿÿ

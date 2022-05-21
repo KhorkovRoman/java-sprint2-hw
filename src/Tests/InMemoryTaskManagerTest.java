@@ -53,9 +53,9 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic20 = new Epic(20, "Epic20", "Epic20 description", TaskStatus.NEW,
                 null, 0);
        SubTask subTask21 = new SubTask(21, "SubTask21", "SubTask21 description", TaskStatus.NEW,
-                LocalDateTime.of(2010, Month.APRIL, 27, 12, 00), 100, epic1);
+                LocalDateTime.of(2010, Month.APRIL, 27, 12, 00), 100, 3);
         SubTask subTask22 = new SubTask(22, "SubTask22", "SubTask22 description", TaskStatus.NEW,
-                LocalDateTime.of(2010, Month.APRIL, 28, 12, 00), 1, epic1);
+                LocalDateTime.of(2010, Month.APRIL, 28, 12, 00), 1, 3);
 
         taskManager.addEpic(epic20);
         taskManager.addSubTask(subTask21);
@@ -85,7 +85,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
         assertEquals(TaskStatus.IN_PROGRESS, epic3.getTaskStatus(), "Статусы не совпадают.");
@@ -98,11 +98,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
         taskManager.addSubTask(subTask5);
@@ -116,11 +116,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -135,11 +135,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -154,11 +154,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -173,11 +173,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -195,11 +195,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -216,11 +216,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -235,11 +235,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -261,11 +261,11 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Epic epic3 = new Epic(8, "Epic2", "Epic2 description", TaskStatus.NEW,
                 null, 0);
         SubTask subTask4 = new SubTask(9, "SubTask4", "SubTask4 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 20, 12, 00), 1, 8);
         SubTask subTask5 = new SubTask(10, "SubTask5", "SubTask5 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 21, 12, 00), 1, 8);
         SubTask subTask6 = new SubTask(11, "SubTask6", "SubTask6 description", TaskStatus.IN_PROGRESS,
-                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, epic3);
+                LocalDateTime.of(2022, Month.MAY, 22, 12, 00), 1, 8);
 
         taskManager.addEpic(epic3);
         taskManager.addSubTask(subTask4);
@@ -280,7 +280,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
 
     @Test
     public void subTaskMustHaveEpic() {
-        assertEquals(epic1, subTask1.getEpic(), "Эпики не совпадают.");
+        assertEquals(epic1.getId(), subTask1.getEpicId(), "Эпики не совпадают.");
     }
 
     @Test

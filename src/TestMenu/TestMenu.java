@@ -63,7 +63,7 @@ public class TestMenu {
                             LocalDateTime startTime = LocalDateTime.parse(scanner.next(), formatter);
                             int duration = scanner.nextInt();
                             Epic epic = manager.getEpicMap().get(idEpic);
-                            SubTask subTask = new SubTask(id, name, description, taskStatus, startTime, duration, epic);
+                            SubTask subTask = new SubTask(id, name, description, taskStatus, startTime, duration, epic.getId());
                             manager.addSubTask(subTask);
                             break;
                         } else {

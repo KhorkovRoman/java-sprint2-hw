@@ -29,13 +29,13 @@ public class TestHistory {
             manager.addEpic(epic1);
 
         SubTask subTask1 = new SubTask(4, "СабТаск1", "Описание СабТаск1", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, 3);
             manager.addSubTask(subTask1);
         SubTask subTask2 = new SubTask(5, "СабТаск2", "Описание СабТаск2", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, 3);
             manager.addSubTask(subTask2);
         SubTask subTask3 = new SubTask(6, "СабТаск3", "Описание СабТаск3", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, 3);
             manager.addSubTask(subTask3);
 
         Epic epic2 = new Epic(7, "Эпик2", "Описание Эпик2", TaskStatus.NEW,

@@ -22,11 +22,11 @@ public class TestFileBacked {
         Epic epic1 = new Epic(3, "Epic1", "Description Epic1", TaskStatus.NEW,
                 null, 0);
         SubTask subTask1 = new SubTask(4, "SubTask1", "Description SubTask1", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 27, 12, 00), 1, 3);
         SubTask subTask2 = new SubTask(5, "SubTask2", "Description SubTask2", TaskStatus.NEW,
-                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 28, 12, 00), 1, 3);
         SubTask subTask3 = new SubTask(6, "SubTask3", "Description SubTask3", TaskStatus.DONE,
-                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, epic1);
+                LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, 3);
         Epic epic2 = new Epic(7, "Epic2", "Description Epic2", TaskStatus.NEW,
                 null, 0);
 

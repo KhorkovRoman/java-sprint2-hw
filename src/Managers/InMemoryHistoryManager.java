@@ -1,7 +1,7 @@
 package Managers;
 
 import TaskStructure.Task;
-import Utils.Node;
+import TaskStructure.Node;
 
 import java.util.Map;
 import java.util.HashMap;
