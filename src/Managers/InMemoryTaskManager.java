@@ -110,6 +110,10 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println("Создали: " + subTask);
 
                 Epic epic = epicMap.get(subTask.getEpicId());
+                if (epic.getSubTaskList() == null) {
+                    epic.setSubTaskList(new HashMap<Integer, SubTask>());
+                }
+
                 HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
                 subTasksEpic.put(subTask.getId(), subTask);
 
@@ -176,7 +180,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         taskMap.put(task.getId(), task);
-        System.out.println("Обновили задачу " + task);
+        System.out.println("Обновили " + task);
 
         taskTreeSet.remove(task);
         addTaskToTreeSet(task);
@@ -184,19 +188,42 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateEpic(Epic epic) {
+        Epic oldEpic = epicMap.get(epic.getId());
+        //subTaskList
+        HashMap<Integer, SubTask> oldSubTaskList = oldEpic.getSubTaskList();
+        if (oldSubTaskList == null) {
+            epic.setSubTaskList(new HashMap<Integer, SubTask>());
+            oldSubTaskList = epic.getSubTaskList();
+        }
+        HashMap<Integer, SubTask> newSubTaskList = epic.getSubTaskList();
+        if (newSubTaskList == null) {
+            epic.setSubTaskList(new HashMap<Integer, SubTask>());
+            newSubTaskList = epic.getSubTaskList();
+        }
+        newSubTaskList.putAll(oldSubTaskList);
+
+        //taskStatus, startTime, duration
+        epic.setTaskStatus(oldEpic.getTaskStatus());
+        epic.setStartTime(oldEpic.getStartTime());
+        epic.setDuration(oldEpic.getDuration());
+
+
         epicMap.put(epic.getId(), epic);
-        System.out.println("Обновили эпик " + epic);
+        System.out.println("Обновили " + epic);
     }
 
     @Override
     public void updateSubTask(SubTask subTask) {
         subTaskMap.put(subTask.getId(), subTask);
-        System.out.println("Обновили подзадачу " + subTask);
+        System.out.println("Обновили " + subTask);
 
         taskTreeSet.remove(subTask);
         addSubTaskToTreeSet(subTask);
 
         Epic epic = epicMap.get(subTask.getEpicId());
+        HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
+        subTasksEpic.put(subTask.getId(), subTask);
+
         setStatusEpic(epic);
         setEpicStartTime(epic);
         setEpicDuration(epic);
@@ -274,7 +301,7 @@ public class InMemoryTaskManager implements TaskManager {
         taskMap.remove(task.getId());
         historyManager.removeFromHistory(task.getId());
         taskTreeSet.remove(task);
-        System.out.println("Удалили задачу " + task);
+        System.out.println("Удалили " + task);
     }
 
     @Override
@@ -285,7 +312,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subTaskMap.remove(i);
                 historyManager.removeFromHistory(i);
                 taskTreeSet.remove(subTaskList.get(i));
-                System.out.println("Удалили подзадачу " + subTaskList.get(i));
+                System.out.println("Удалили " + subTaskList.get(i));
             }
             subTaskList.clear();
 
@@ -294,7 +321,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epicMap.remove(epic.getId());
         historyManager.removeFromHistory(epic.getId());
-        System.out.println("Удалили эпик " + epic);
+        System.out.println("Удалили " + epic);
     }
 
     @Override
@@ -307,7 +334,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskMap.remove(subTask.getId());
         historyManager.removeFromHistory(subTask.getId());
         taskTreeSet.remove(subTask);
-        System.out.println("Удалили подзадачу " + subTask);
+        System.out.println("Удалили " + subTask);
 
         setStatusEpic(epic);
         setEpicStartTime(epic);

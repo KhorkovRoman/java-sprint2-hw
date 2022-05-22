@@ -40,88 +40,88 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void getTaskById(int id) {
         super.getTaskById(id);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public Task getTask(int id) {
         Task task = super.getTask(id);
-        save();
+        save(tasksFile);
         return task;
     }
 
     @Override
     public Epic getEpic(int id) {
         Epic epic = super.getEpic(id);
-        save();
+        save(tasksFile);
         return epic;
     }
 
     @Override
     public SubTask getSubTask(int id) {
         SubTask subTask = super.getSubTask(id);
-        save();
+        save(tasksFile);
         return subTask;
     }
 
     @Override
     public void addTask(Task task) {
         super.addTask(task);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void addEpic(Epic epic) {
         super.addEpic(epic);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void addSubTask(SubTask subTask) {
         super.addSubTask(subTask);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void updateTask(Task task) {
         super.updateTask(task);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void updateSubTask(SubTask subTask) {
         super.updateSubTask(subTask);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void removeTask(Task task) {
         super.removeTask(task);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void removeEpic(Epic epic) {
         super.removeEpic(epic);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void removeSubTask(SubTask subTask) {
         super.removeSubTask(subTask);
-        save();
+        save(tasksFile);
     }
 
     @Override
     public void deleteTasksEpicsSubTasks() {
         super.deleteTasksEpicsSubTasks();
-        save();
+        save(tasksFile);
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {
@@ -194,9 +194,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return manager;
     }
 
-    public void save() {
+    public void save(String tasksFile) {
 
-        try (FileWriter fr = new FileWriter("tasksFile.csv", StandardCharsets.UTF_8)) {
+        try (FileWriter fr = new FileWriter(tasksFile, StandardCharsets.UTF_8)) {
 
             fr.write("id,type,name,description,status,start,duration,epic\n");
 

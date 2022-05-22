@@ -29,7 +29,16 @@ import com.google.gson.stream.JsonReader;
 
 public class HttpTaskServer {
 
-    static FileBackedTasksManager taskManager = Managers.getDefaultFileBackedTasksManager();
+    //static FileBackedTasksManager taskManager = Managers.getDefaultFileBackedTasksManager();
+    static HTTPTaskManager taskManager;
+
+    static {
+        try {
+            taskManager = Managers.getDefaultHTTPTaskManager();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private static final int PORT = 8080;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
@@ -155,7 +164,7 @@ public class HttpTaskServer {
                         .split("\\?")[1].split("=")[1]);
 
                 if (taskManager.getSubTaskMap().containsKey(idSubTask)) {
-                    SubTask subTask = taskManager.getSubTask(idSubTask);
+                    SubTask subTask = taskManager.getSubTaskMap().get(idSubTask);
                     taskManager.removeSubTask(subTask);
                     String response = "Удалили " + gson.toJson(subTask);
 
@@ -181,7 +190,7 @@ public class HttpTaskServer {
                         .split("\\?")[1].split("=")[1]);
 
                 if (taskManager.getEpicMap().containsKey(idEpic)) {
-                    Epic epic = taskManager.getEpic(idEpic);
+                    Epic epic = taskManager.getEpicMap().get(idEpic);
                     taskManager.removeEpic(epic);
                     String response = "Удалили " + gson.toJson(epic);
 
@@ -195,6 +204,32 @@ public class HttpTaskServer {
                     try (OutputStream os = httpExchange.getResponseBody()) {
                         os.write(gson.toJson("Эпик с Id "
                                 + idEpic + " не найден в базе.").getBytes());
+                    }
+                }
+            }
+        }
+
+        static class DeleteTaskHandler implements HttpHandler {
+            @Override
+            public void handle(HttpExchange httpExchange) throws IOException {
+                int idTask = Integer.parseInt(httpExchange.getRequestURI().toString()
+                        .split("\\?")[1].split("=")[1]);
+
+                if (taskManager.getTaskMap().containsKey(idTask)) {
+                    Task task = taskManager.getTaskMap().get(idTask);
+                    taskManager.removeTask(task);
+                    String response = "Удалили " + gson.toJson(task);
+
+                    httpExchange.sendResponseHeaders(200, 0);
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(response.getBytes());
+                    }
+                } else {
+                    httpExchange.sendResponseHeaders(404, 0);
+
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(gson.toJson("Задача с Id "
+                                + idTask + " не найдена в базе.").getBytes());
                     }
                 }
             }
@@ -401,6 +436,33 @@ public class HttpTaskServer {
             }
         }
 
+        static class PostAddTaskHandler implements HttpHandler {
+            @Override
+            public void handle(HttpExchange httpExchange) throws IOException {
+                InputStream inputStream = httpExchange.getRequestBody();
+                String bodyAdd = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
+                Task taskToAdd = gson.fromJson(bodyAdd, Task.class);
+                if (!taskManager.getTaskMap().containsKey(taskToAdd.getId())) {
+                    taskManager.addTask(taskToAdd);
+
+                    String response = "Создали новую задачу с Id "+ taskToAdd.getId();
+                    httpExchange.sendResponseHeaders(201, 0);
+
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(response.getBytes());
+                    }
+                } else {
+                    httpExchange.sendResponseHeaders(404, 0);
+
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(gson.toJson("Задача с Id "
+                                + taskToAdd.getId() + " уже есть в базе.").getBytes());
+                    }
+                }
+
+            }
+        }
+
         static class GetHistoryHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
@@ -435,32 +497,6 @@ public class HttpTaskServer {
 
                     try (OutputStream os = httpExchange.getResponseBody()) {
                         os.write(gson.toJson("Задач для удаления нет.").getBytes());
-                    }
-                }
-            }
-        }
-
-        static class DeleteTaskHandler implements HttpHandler {
-            @Override
-            public void handle(HttpExchange httpExchange) throws IOException {
-                int idTask = Integer.parseInt(httpExchange.getRequestURI().toString()
-                        .split("\\?")[1].split("=")[1]);
-
-                if (taskManager.getTaskMap().containsKey(idTask)) {
-                    Task task = taskManager.getTask(idTask);
-                    taskManager.removeTask(task);
-                    String response = "Удалили " + gson.toJson(task);
-
-                    httpExchange.sendResponseHeaders(200, 0);
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(response.getBytes());
-                    }
-                } else {
-                    httpExchange.sendResponseHeaders(404, 0);
-
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(gson.toJson("Задача с Id "
-                                + idTask + " не найдена в базе.").getBytes());
                     }
                 }
             }
@@ -550,32 +586,6 @@ public class HttpTaskServer {
                     try (OutputStream os = httpExchange.getResponseBody()) {
                         os.write(gson.toJson("Задача с Id "
                                 + idTask + " нет в базе.").getBytes());
-                    }
-                }
-
-            }
-        }
-
-        static class PostAddTaskHandler implements HttpHandler {
-            @Override
-            public void handle(HttpExchange httpExchange) throws IOException {
-                InputStream inputStream = httpExchange.getRequestBody();
-                String bodyAdd = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
-                Task taskToAdd = gson.fromJson(bodyAdd, Task.class);
-                if (!taskManager.getTaskMap().containsKey(taskToAdd.getId())) {
-                    taskManager.addTask(taskToAdd);
-                    String response = "Создали новую задачу с Id "+ taskToAdd.getId();
-                    httpExchange.sendResponseHeaders(201, 0);
-
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(response.getBytes());
-                    }
-                } else {
-                    httpExchange.sendResponseHeaders(404, 0);
-
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(gson.toJson("Задача с Id "
-                                + taskToAdd.getId() + " уже есть в базе.").getBytes());
                     }
                 }
 

@@ -27,12 +27,12 @@ public class Task {
         this.duration = duration;
     }
 
-//    public Task(Integer id, String name, String description, TaskStatus taskStatus) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.taskStatus = taskStatus;
-//    }
+    public Task(Integer id, String name, String description, TaskStatus taskStatus) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.taskStatus = taskStatus;
+    }
 
     public Integer getId() {
         return id;
@@ -59,8 +59,6 @@ public class Task {
     }
 
     public TaskStatus getTaskStatus() {
-
-
         return taskStatus;
     }
 

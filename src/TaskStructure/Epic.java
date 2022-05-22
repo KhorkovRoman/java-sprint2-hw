@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private final HashMap<Integer, SubTask> subTaskList;
+
+    private HashMap<Integer, SubTask> subTaskList;
 
     public Epic(Integer id, String name, String description, TaskStatus taskStatus,
                 LocalDateTime startTime, int duration) {
@@ -13,9 +14,20 @@ public class Epic extends Task {
         this.subTaskList = new HashMap<>();
     }
 
+    public Epic(Integer id, String name, String description, TaskStatus taskStatus) {
+        super(id, name, description, taskStatus);
+        this.subTaskList = new HashMap<>();
+    }
+
     public HashMap<Integer, SubTask> getSubTaskList() {
         return subTaskList;
     }
+
+    public void setSubTaskList(HashMap<Integer, SubTask> subTaskList) {
+        this.subTaskList = subTaskList;
+    }
+
+
 
     @Override
     public LocalDateTime getStartTime() {
@@ -49,18 +61,19 @@ public class Epic extends Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subTaskList);
+        return Objects.hash(hashCode(), subTaskList);
     }
 
     @Override
     public String toString() {
         return  "Epic{" +
-                "id=" + super.getId() +
-                ", name='" + super.getName() + '\'' +
-                ", description='" + super.getDescription() + '\'' +
-                ", status='" + super.getTaskStatus() + '\'' +
-                ", start='" + super.getStartTime() + '\'' +
-                ", duration='" + super.getDuration() + '\'' +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", status='" + getTaskStatus() + '\'' +
+                ", start='" + getStartTime() + '\'' +
+                ", duration='" + getDuration() + '\'' +
+                ", subTaskList='" + getSubTaskList() + '\'' +
                 '}';
     }
 }
