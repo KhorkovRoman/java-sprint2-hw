@@ -12,11 +12,11 @@ public class KVTaskClient {
     private String url;
     private String apiKey;
 
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
-    HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-    HttpRequest request;
-    HttpResponse<String> response;
+    private HttpClient client = HttpClient.newHttpClient();
+    private HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
+    private HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
+    private HttpRequest request;
+    private HttpResponse<String> response;
 
     public KVTaskClient(String url) throws IOException, InterruptedException {
         this.url = url;

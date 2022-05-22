@@ -2,6 +2,7 @@ package Tests;
 
 import Managers.InMemoryTaskManager;
 
+import Managers.Managers;
 import TaskStructure.Epic;
 import TaskStructure.SubTask;
 import TaskStructure.Task;
@@ -19,7 +20,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
 
     @Override
     public void setManager() {
-        taskManager = new InMemoryTaskManager();
+        taskManager = Managers.getDefaultInMemoryTaskManager();
     }
 
     @Test

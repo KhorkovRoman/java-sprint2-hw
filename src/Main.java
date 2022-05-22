@@ -23,9 +23,9 @@ public class Main {
 
         new KVServer().start();
 
-        new HttpTaskServer().createHTTPServer();
+        new HttpTaskServer(new HTTPTaskManager("http://localhost:8078")).createHTTPServer();
 
-        Managers.getDefaultHTTPTaskManager();
+        //Managers.getDefaultHTTPTaskManager();
 
 //        try {
 //            HttpTaskServer httpTaskServer = new HttpTaskServer();

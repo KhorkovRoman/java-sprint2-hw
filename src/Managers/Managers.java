@@ -6,11 +6,11 @@ import java.io.IOException;
 
 public abstract class Managers implements TaskManager{
 
-    public static InMemoryTaskManager getDefault() {
+    public static InMemoryTaskManager getDefaultInMemoryTaskManager() {
         return new InMemoryTaskManager();
     }
 
-    public static InMemoryHistoryManager getDefaultHistory() {
+    public static InMemoryHistoryManager InMemoryHistoryManager() {
         return new InMemoryHistoryManager();
     }
 

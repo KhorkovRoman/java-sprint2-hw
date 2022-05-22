@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class TestMenu {
 
-    InMemoryTaskManager manager = Managers.getDefault();
+    InMemoryTaskManager manager = Managers.getDefaultInMemoryTaskManager();
 
     public void testMenu() throws ManagerSaveException {
         Scanner scanner = new Scanner(System.in);

@@ -1,7 +1,7 @@
 package HTTP;
 
-import Managers.FileBackedTasksManager;
 import Managers.Managers;
+import Managers.TaskManager;
 import TaskStructure.Epic;
 import TaskStructure.SubTask;
 import TaskStructure.Task;
@@ -26,28 +26,25 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.JsonReader;
 
-
 public class HttpTaskServer {
 
-    //static FileBackedTasksManager taskManager = Managers.getDefaultFileBackedTasksManager();
-    static HTTPTaskManager taskManager;
+    HTTPTaskManager taskManager;
+    HttpServer httpServer;
 
-    static {
-        try {
-            taskManager = Managers.getDefaultHTTPTaskManager();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public HttpTaskServer(HTTPTaskManager taskManager) throws IOException {
+        this.taskManager = taskManager;
     }
 
-    private static final int PORT = 8080;
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private static final Gson gson = new GsonBuilder()
+    private final int PORT = 8080;
+    private final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .serializeNulls()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             // любые другие методы билдера
             .create();
+
+
 
     public void createHTTPServer() throws IOException {
         HttpServer httpServer = HttpServer.create();
@@ -60,7 +57,11 @@ public class HttpTaskServer {
         //httpServer.stop(1); //остановили HTTP-сервер (программу)
     }
 
-    static class TaskHandler implements HttpHandler {
+    public void stopHttpServer() {
+        httpServer.stop(1);
+    }
+
+    class TaskHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String methodRequest = httpExchange.getRequestMethod();
@@ -156,7 +157,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetPrioritizedTasksHandler implements HttpHandler {
+        class GetPrioritizedTasksHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (!taskManager.getPrioritizedTasks().isEmpty()) {
@@ -175,7 +176,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class PostAddTaskHandler implements HttpHandler {
+        class PostAddTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 InputStream inputStream = httpExchange.getRequestBody();
@@ -202,7 +203,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class PostAddEpicHandler implements HttpHandler {
+        class PostAddEpicHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 InputStream inputStream = httpExchange.getRequestBody();
@@ -228,7 +229,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class PostAddSubTaskHandler implements HttpHandler {
+        class PostAddSubTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 InputStream inputStream = httpExchange.getRequestBody();
@@ -261,7 +262,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class PostUpdateTaskHandler implements HttpHandler {
+        class PostUpdateTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idTask = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -289,7 +290,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class PostUpdateEpicHandler implements HttpHandler {
+        class PostUpdateEpicHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idEpic = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -317,7 +318,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class PostUpdateSubTaskHandler implements HttpHandler {
+        class PostUpdateSubTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idSubTask = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -345,7 +346,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetTaskHandler implements HttpHandler {
+        class GetTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idTask = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -370,7 +371,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetEpicHandler implements HttpHandler {
+        class GetEpicHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idEpic = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -395,7 +396,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetSubTaskHandler implements HttpHandler {
+        class GetSubTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idSubTask = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -420,7 +421,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetTasksMapHandler implements HttpHandler {
+        class GetTasksMapHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (!taskManager.getTaskMap().isEmpty()) {
@@ -438,7 +439,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetEpicsMapHandler implements HttpHandler {
+        class GetEpicsMapHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (!taskManager.getEpicMap().isEmpty()) {
@@ -456,7 +457,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetSubTasksMapHandler implements HttpHandler {
+        class GetSubTasksMapHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (!taskManager.getSubTaskMap().isEmpty()) {
@@ -474,7 +475,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class GetHistoryHandler implements HttpHandler {
+        class GetHistoryHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (!taskManager.getHistoryList().isEmpty()) {
@@ -492,7 +493,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class DeleteSubTaskHandler implements HttpHandler {
+        class DeleteSubTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idSubTask = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -518,7 +519,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class DeleteEpicHandler implements HttpHandler {
+        class DeleteEpicHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idEpic = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -544,7 +545,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class DeleteTaskHandler implements HttpHandler {
+        class DeleteTaskHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 int idTask = Integer.parseInt(httpExchange.getRequestURI().toString()
@@ -570,7 +571,7 @@ public class HttpTaskServer {
             }
         }
 
-        static class DeleteTasksEpicsSubTasksMapHandler implements HttpHandler {
+        class DeleteTasksEpicsSubTasksMapHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
                 if (!taskManager.getTaskMap().isEmpty() ||

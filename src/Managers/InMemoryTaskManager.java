@@ -19,7 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final TreeSet<Task> taskTreeSet = new TreeSet<Task>(Comparator.comparing(Task::getStartTime,
             Comparator.nullsLast(Comparator.naturalOrder())).thenComparing(Task::getId));
 
-    private final InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+    private final InMemoryHistoryManager historyManager = Managers.InMemoryHistoryManager();
 
     private Integer id = 0;
 
