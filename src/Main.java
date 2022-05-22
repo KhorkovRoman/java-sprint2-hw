@@ -27,10 +27,6 @@ public class Main {
 
         Managers.getDefaultHTTPTaskManager();
 
-        //System.out.println(httpTaskManager.getKvTaskClient().getApiKey());
-
-
-
 //        try {
 //            HttpTaskServer httpTaskServer = new HttpTaskServer();
 //            httpTaskServer.createHTTPServer();

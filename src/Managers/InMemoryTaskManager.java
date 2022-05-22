@@ -207,7 +207,6 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStartTime(oldEpic.getStartTime());
         epic.setDuration(oldEpic.getDuration());
 
-
         epicMap.put(epic.getId(), epic);
         System.out.println("Обновили " + epic);
     }
