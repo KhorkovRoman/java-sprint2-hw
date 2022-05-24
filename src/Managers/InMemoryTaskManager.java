@@ -1,9 +1,6 @@
 package Managers;
 
-import TaskStructure.Epic;
-import TaskStructure.SubTask;
-import TaskStructure.Task;
-import TaskStructure.TaskStatus;
+import TaskStructure.*;
 
 import java.util.TreeSet;
 
@@ -46,6 +43,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistoryList() {
         return historyManager.getHistory();
+    }
+
+    public HashMap<Integer, Node<Task>> getHistoryMap() {
+        return historyManager.getHistoryMap();
     }
 
     @Override

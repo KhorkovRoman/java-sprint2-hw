@@ -8,13 +8,20 @@ public class Epic extends Task {
 
     private HashMap<Integer, SubTask> subTaskList;
 
-    public Epic(Integer id, String name, String description, TaskStatus taskStatus,
-                LocalDateTime startTime, int duration) {
+    public Epic(Integer id,
+                String name,
+                String description,
+                TaskStatus taskStatus,
+                LocalDateTime startTime,
+                int duration) {
         super(id, name, description, taskStatus, startTime, duration);
         this.subTaskList = new HashMap<>();
     }
 
-    public Epic(Integer id, String name, String description, TaskStatus taskStatus) {
+    public Epic(Integer id,
+                String name,
+                String description,
+                TaskStatus taskStatus) {
         super(id, name, description, taskStatus);
         this.subTaskList = new HashMap<>();
     }

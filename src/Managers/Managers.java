@@ -1,7 +1,5 @@
 package Managers;
 
-import HTTP.HTTPTaskManager;
-
 import java.io.IOException;
 
 public abstract class Managers implements TaskManager{

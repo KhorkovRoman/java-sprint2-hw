@@ -1,7 +1,15 @@
 package HTTP;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpContext;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpPrincipal;
+
 import java.io.IOException;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,49 +26,62 @@ public class KVTaskClient {
     private HttpRequest request;
     private HttpResponse<String> response;
 
-    public KVTaskClient(String url) throws IOException, InterruptedException {
+    public KVTaskClient(String url) {
         this.url = url;
-        request = requestBuilder
-                .uri(URI.create(url + "/register"))
-                .version(HttpClient.Version.HTTP_1_1)
-                .header("Accept", "text/html")
-                .GET()
-                .build();
-        response = client.send(request, handler);
-        this.apiKey = response.body();
+        this.apiKey = register();
     }
 
     public String getApiKey() {
         return apiKey;
     }
 
-    void put(String key, String json) {
+    public String register() {
+        request = requestBuilder
+                .uri(URI.create(url + "/register"))
+                .version(HttpClient.Version.HTTP_1_1)
+                .header("Accept", "text/html")
+                .GET()
+                .build();
+        try {
+            response = client.send(request, handler);
+            if (response.statusCode() != 200) {
+                throw new RuntimeException();
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException();
+        }
+        return response.body();
+    }
 
+
+    public void put(String key, String json) {
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
-
         request = requestBuilder
                 .uri(URI.create(url + "/save/" + key + "?API_TOKEN=" + apiKey))
                 .POST(body)
                 .build();
         try {
             response = client.send(request, handler);
+            if (response.statusCode() != 200) {
+                throw new RuntimeException();
+            }
         } catch (IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
+            throw new RuntimeException();
         }
     }
 
-    String load(String key) {
-
+    public String load(String key) {
         request = requestBuilder
                 .uri(URI.create(url + "/load/" + key + "?API_TOKEN=" + apiKey))
                 .GET()
                 .build();
         try {
             response = client.send(request, handler);
+            if (response.statusCode() != 200) {
+                throw new RuntimeException();
+            }
         } catch (IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
+            throw new RuntimeException();
         }
         return response.body();
     }

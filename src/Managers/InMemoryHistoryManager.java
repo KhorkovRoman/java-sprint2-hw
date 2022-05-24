@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final Map<Integer, Node<Task>> historyMap = new HashMap<>();
+    private final HashMap<Integer, Node<Task>> historyMap = new HashMap<>();
 
-    public Map<Integer, Node<Task>> getHistoryMap() {
+    public HashMap<Integer, Node<Task>> getHistoryMap() {
         return historyMap;
     }
 

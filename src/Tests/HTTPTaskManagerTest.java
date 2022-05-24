@@ -1,68 +1,33 @@
 package Tests;
 
-import HTTP.HTTPTaskManager;
+import Managers.HTTPTaskManager;
 import Managers.Managers;
-import Managers.TaskManager;
 import HTTP.HttpTaskServer;
 import HTTP.KVServer;
-import TaskStructure.Epic;
-import TaskStructure.SubTask;
-import TaskStructure.Task;
-import TaskStructure.TaskStatus;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import TaskStructure.*;
+import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
+import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HTTPTaskManagerTest {
 
-//    private TaskManager taskManager = Managers.getDefaultHTTPTaskManager();
-//    private KVServer kvServer = new KVServer();
-//    private HttpTaskServer httpTaskServer = new HttpTaskServer();
-
-    public HTTPTaskManager httpTaskManager;
-    private KVServer kvServer;
-    private HttpTaskServer httpTaskServer;
-
-    String urlServer = "http://localhost:8078";
-
-    public HTTPTaskManagerTest() throws IOException, InterruptedException {
-        this.kvServer = new KVServer();
-        this.httpTaskManager = Managers.getDefaultHTTPTaskManager();
-        this.httpTaskServer = new HttpTaskServer(this.httpTaskManager);
-    }
-
-    private static final int PORT = 8080;
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .serializeNulls()
-            .registerTypeAdapter(LocalDateTime.class, new HttpTaskServer.LocalDateTimeAdapter())
-            // любые другие методы билдера
-            .create();
-
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
-    HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-    HttpRequest request;
-    HttpResponse<String> response;
+    KVServer kvServer;
+    HTTPTaskManager httpTaskManager;
+    HttpTaskServer httpTaskServer;
 
     Task task1 = new Task(1, "Task1", "Task1 description", TaskStatus.NEW,
             LocalDateTime.of(2022, Month.APRIL, 26, 10, 00), 1);
@@ -80,16 +45,14 @@ public class HTTPTaskManagerTest {
             LocalDateTime.of(2022, Month.APRIL, 29, 12, 00), 1, 3);
 
     Epic epic2 = new Epic(7, "Epic2", "Epic2 description", TaskStatus.NEW,
-            null, 0);
-
-
+        LocalDateTime.of(2022, Month.APRIL, 30, 12, 00), 1);
 
     @BeforeEach
     public void addAllTasksEpicsAndSubTasks() throws IOException, InterruptedException {
-        //httpTaskManager = Managers.getDefaultHTTPTaskManager();
-        //kvServer = new KVServer();
+        kvServer = new KVServer();
         kvServer.start();
-        //httpTaskServer = new HttpTaskServer(httpTaskManager);
+        httpTaskManager = Managers.getDefaultHTTPTaskManager();
+        httpTaskServer = new HttpTaskServer(httpTaskManager);
         httpTaskServer.createHTTPServer();
 
         httpTaskManager.addTask(task1);
@@ -107,8 +70,7 @@ public class HTTPTaskManagerTest {
 
     @AfterEach
     public void clearTaskMapEpicMapSubTaskMap() {
-//        httpTaskManager.deleteTasksEpicsSubTasks();
-
+        httpTaskManager.deleteTasksEpicsSubTasks();
 
         kvServer.stopKVServer();
         httpTaskServer.stopHttpServer();
@@ -116,58 +78,157 @@ public class HTTPTaskManagerTest {
 
     @Test
     public void shouldReturnTaskById() throws IOException, InterruptedException {
-        request = requestBuilder
-                .uri(URI.create(urlServer + "/tasks/task?id=1"))
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create("http://localhost:8080/tasks/task/?id=1");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
                 .version(HttpClient.Version.HTTP_1_1)
                 .GET()
                 .build();
-        response = client.send(request, handler);
-        Task taskFromServer = gson.fromJson(response.body(), Task.class);
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Task taskFromServer = httpTaskServer.getGson().fromJson(response.body(), Task.class);
         assertEquals(task1, taskFromServer);
     }
 
-//    @Test
-//    public void shouldReturnEpicById() throws IOException, InterruptedException {
-//        request = requestBuilder
-//                .uri(URI.create(urlServer + "/tasks/epic?id=7"))
-//                .version(HttpClient.Version.HTTP_1_1)
-//                .GET()
-//                .build();
-//        response = client.send(request, handler);
-//        Epic epicFromServer = gson.fromJson(response.body(), Epic.class);
-//        assertEquals(epic2, epicFromServer);
-//    }
-//
-//    @Test
-//    public void shouldReturnSubTaskById() throws IOException, InterruptedException {
-//        request = requestBuilder
-//                .uri(URI.create(urlServer + "/tasks/subtask?id=4"))
-//                .version(HttpClient.Version.HTTP_1_1)
-//                .GET()
-//                .build();
-//        response = client.send(request, handler);
-//        SubTask subTaskFromServer = gson.fromJson(response.body(), SubTask.class);
-//        assertEquals(subTask1, subTaskFromServer);
-//    }
+    @Test
+    public void shouldReturnTasksList() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create("http://localhost:8080/tasks/task");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type type = new TypeToken<HashMap<Integer, Task>>(){}.getType();
+        HashMap taskMap = httpTaskServer.getGson().fromJson(response.body(), type);
+        assertEquals(httpTaskManager.getTaskMap(), taskMap);
+    }
 
-    public static class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
+    @Test
+    public void shouldReturnEpicById() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/tasks/epic/?id=7"))
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Epic epicFromServer = httpTaskServer.getGson().fromJson(response.body(), Epic.class);
+        assertEquals(epic2, epicFromServer);
+    }
 
-        private final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy(HH:mm)");
+    @Test
+    public void shouldReturnEpicsList() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create("http://localhost:8080/tasks/epic");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type type = new TypeToken<HashMap<Integer, Epic>>() {}.getType();
+        HashMap epicMap = httpTaskServer.getGson().fromJson(response.body(), type);
+        assertEquals(httpTaskManager.getEpicMap(), epicMap);
+    }
 
-        @Override
-        public void write(final JsonWriter jsonWriter, final LocalDateTime localDateTime) throws IOException {
-            if (localDateTime == null) {
-                jsonWriter.nullValue();
-                return;
-            }
-            jsonWriter.value(localDateTime.format(DATE_TIME_FORMATTER));
+    @Test
+    public void shouldReturnSubTaskById() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/tasks/subtask?id=4"))
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        SubTask subTaskFromServer = httpTaskServer.getGson().fromJson(response.body(), SubTask.class);
+        assertEquals(subTask1, subTaskFromServer);
+    }
+
+    @Test
+    public void shouldReturnSubTasksList() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create("http://localhost:8080/tasks/subtask");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type type = new TypeToken<HashMap<Integer, SubTask>>() {}.getType();
+        HashMap subtaskMap = httpTaskServer.getGson().fromJson(response.body(), type);
+        assertEquals(httpTaskManager.getSubTaskMap(), subtaskMap);
+    }
+
+    @Test
+    public void shouldReturnHistoryListElements() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create("http://localhost:8080/tasks/history");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type type = new TypeToken<List<Task>>() {}.getType();
+        List<Task> historyList = httpTaskServer.getGson().fromJson(response.body(), type);
+
+        List<Task> histList = httpTaskManager.getHistoryList();
+
+        for (int i=0; i < historyList.size(); i++) {
+            assertEquals(histList.get(i).getId(), historyList.get(i).getId());
+            assertEquals(histList.get(i).getName(), historyList.get(i).getName());
+            assertEquals(histList.get(i).getDescription(), historyList.get(i).getDescription());
+            assertEquals(histList.get(i).getTaskStatus(), historyList.get(i).getTaskStatus());
+            assertEquals(histList.get(i).getStartTime(), historyList.get(i).getStartTime());
+            assertEquals(histList.get(i).getDuration(), historyList.get(i).getDuration());
         }
+    }
 
-        @Override
-        public LocalDateTime read(final JsonReader jsonReader) throws IOException {
-            return LocalDateTime.parse(jsonReader.nextString(), DATE_TIME_FORMATTER);
+    @Test
+    public void shouldReturnPrioritizedListElements() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create("http://localhost:8080/tasks");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .version(HttpClient.Version.HTTP_1_1)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type type = new TypeToken<List<Task>>() {}.getType();
+        List<Task> priorServ = httpTaskServer.getGson().fromJson(response.body(), type);
+
+        List<Task> priorBase = new ArrayList<Task>(httpTaskManager.getPrioritizedTasks());
+
+        for (int i=0; i < priorBase.size(); i++) {
+            assertEquals(priorBase.get(i).getId(), priorServ.get(i).getId());
+            assertEquals(priorBase.get(i).getName(), priorServ.get(i).getName());
+            assertEquals(priorBase.get(i).getDescription(), priorServ.get(i).getDescription());
+            assertEquals(priorBase.get(i).getTaskStatus(), priorServ.get(i).getTaskStatus());
+            assertEquals(priorBase.get(i).getStartTime(), priorServ.get(i).getStartTime());
+            assertEquals(priorBase.get(i).getDuration(), priorServ.get(i).getDuration());
         }
     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
