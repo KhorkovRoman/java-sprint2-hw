@@ -87,45 +87,39 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addTask(Task task) {
-        if (!taskMap.containsKey(task.getId())) {
-            taskMap.put(task.getId(), task);
-            System.out.println("Создали: " + task);
-        }
+        taskMap.put(task.getId(), task);
+        System.out.println("Создали: " + task);
 
         addTaskToTreeSet(task);
     }
 
     @Override
     public void addEpic(Epic epic) {
-        if (!epicMap.containsKey(epic.getId())) {
-            epicMap.put(epic.getId(), epic);
-            System.out.println("Создали: " + epic);
-        }
+        epicMap.put(epic.getId(), epic);
+        System.out.println("Создали: " + epic);
     }
 
     @Override
     public void addSubTask(SubTask subTask) {
-        if (!subTaskMap.containsKey(subTask.getId())) {
-            if (epicMap.containsKey(subTask.getEpicId())) {
-                subTaskMap.put(subTask.getId(), subTask);
-                System.out.println("Создали: " + subTask);
+        if (epicMap.containsKey(subTask.getEpicId())) {
+            subTaskMap.put(subTask.getId(), subTask);
+            System.out.println("Создали: " + subTask);
 
-                Epic epic = epicMap.get(subTask.getEpicId());
-                if (epic.getSubTaskList() == null) {
-                    epic.setSubTaskList(new HashMap<Integer, SubTask>());
-                }
-
-                HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
-                subTasksEpic.put(subTask.getId(), subTask);
-
-                addSubTaskToTreeSet(subTask);
-
-                setStatusEpic(epic);
-                setEpicStartTime(epic);
-                setEpicDuration(epic);
-            } else {
-                System.out.println("В базе нет эпика с Id " + subTask.getEpicId());
+            Epic epic = epicMap.get(subTask.getEpicId());
+            if (epic.getSubTaskList() == null) {
+                epic.setSubTaskList(new HashMap<Integer, SubTask>());
             }
+
+            HashMap<Integer, SubTask> subTasksEpic = epic.getSubTaskList();
+            subTasksEpic.put(subTask.getId(), subTask);
+
+            addSubTaskToTreeSet(subTask);
+
+            setStatusEpic(epic);
+            setEpicStartTime(epic);
+            setEpicDuration(epic);
+        } else {
+            System.out.println("В базе нет эпика с Id " + subTask.getEpicId());
         }
     }
 

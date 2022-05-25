@@ -2,8 +2,6 @@ package Managers;
 
 import HTTP.KVTaskClient;
 import com.google.gson.Gson;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -12,7 +10,7 @@ public class HTTPTaskManager extends FileBackedTasksManager {
     private final KVTaskClient kvTaskClient;
     private final Gson gson = new Gson();
 
-    public HTTPTaskManager(String url) throws IOException, InterruptedException {
+    public HTTPTaskManager(String url) {
         kvTaskClient = new KVTaskClient(url);
     }
 

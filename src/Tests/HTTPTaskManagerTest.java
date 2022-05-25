@@ -1,10 +1,12 @@
 package Tests;
 
+import HTTP.KVTaskClient;
 import Managers.HTTPTaskManager;
 import Managers.Managers;
 import HTTP.HttpTaskServer;
 import HTTP.KVServer;
 import TaskStructure.*;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -218,8 +220,6 @@ public class HTTPTaskManagerTest {
             assertEquals(priorBase.get(i).getDuration(), priorServ.get(i).getDuration());
         }
     }
-
-
 }
 
 
