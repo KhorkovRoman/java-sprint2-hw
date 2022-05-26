@@ -21,7 +21,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Integer id = 0;
 
     public Integer getId() {
-        return id;
+        return ++id;
     }
 
     public HashMap<Integer, Task> getTaskMap() {
@@ -87,6 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addTask(Task task) {
+        task.setId(getId());
         taskMap.put(task.getId(), task);
         System.out.println("Создали: " + task);
 
@@ -95,6 +96,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addEpic(Epic epic) {
+        epic.setId(getId());
         epicMap.put(epic.getId(), epic);
         System.out.println("Создали: " + epic);
     }
@@ -102,6 +104,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addSubTask(SubTask subTask) {
         if (epicMap.containsKey(subTask.getEpicId())) {
+            subTask.setId(getId());
             subTaskMap.put(subTask.getId(), subTask);
             System.out.println("Создали: " + subTask);
 

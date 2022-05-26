@@ -165,92 +165,66 @@ public class HttpTaskServer {
             }
         }
 
-        public void handlePostAddUpdateTask(HttpExchange httpExchange) throws IOException {
-            String body = readText(httpExchange);
+        public void handlePostAddUpdateTask(HttpExchange h) throws IOException {
+            String body = readText(h);
             if (body.isEmpty()) {
-                httpExchange.sendResponseHeaders(400, 0);
+                h.sendResponseHeaders(400, 0);
             }
             Task task = gson.fromJson(body, Task.class);
-            if (httpExchange.getRequestURI().getQuery() == null) {
-                if (!taskManager.getTaskMap().containsKey(task.getId())) {
-                    taskManager.addTask(task);
-                    String response = "Создали новую задачу с Id " + task.getId();
-                    successWrite(httpExchange, response, 200);
-                } else {
-                    String message = "Задача с Id " + task.getId() + " уже есть в базе.";
-                    failureWrite(httpExchange, message, 404);
-                }
+            if (h.getRequestURI().getQuery() == null) {
+                taskManager.addTask(task);
+                successWrite(h, "Создали новую задачу с Id " + task.getId(), 200);
             } else {
-                int idTask = setId(httpExchange);
+                int idTask = setId(h);
                 if (taskManager.getTaskMap().containsKey(idTask)) {
                     taskManager.updateTask(task);
-                    String response = "Обновили задачу с Id "+ idTask;
-                    successWrite(httpExchange, response, 200);
+                    successWrite(h, "Обновили задачу с Id "+ idTask, 200);
                 } else {
-                    String message = "Задачи с Id " + idTask + " нет в базе.";
-                    failureWrite(httpExchange, message, 404);
+                    failureWrite(h, "Задачи с Id " + idTask + " нет в базе.", 404);
                 }
             }
         }
 
-        public void handlePostAddUpdateEpic(HttpExchange httpExchange) throws IOException {
-            String body = readText(httpExchange);
+        public void handlePostAddUpdateEpic(HttpExchange h) throws IOException {
+            String body = readText(h);
             if (body.isEmpty()) {
-                httpExchange.sendResponseHeaders(400, 0);
+                h.sendResponseHeaders(400, 0);
             }
             Epic epic = gson.fromJson(body, Epic.class);
-
-            if (httpExchange.getRequestURI().getQuery() == null) {
-                if (!taskManager.getEpicMap().containsKey(epic.getId())) {
-                    taskManager.addEpic(epic);
-                    String response = "Создали новый эпик с Id "+ epic.getId();
-                    successWrite(httpExchange, response, 200);
-                } else {
-                    String message = "Эпик с Id " + epic.getId() + " уже есть в базе.";
-                    failureWrite(httpExchange, message, 404);
-                }
+            if (h.getRequestURI().getQuery() == null) {
+                taskManager.addEpic(epic);
+                successWrite(h, "Создали новый эпик с Id "+ epic.getId(), 200);
             } else {
-                int idEpic = setId(httpExchange);
+                int idEpic = setId(h);
                 if (taskManager.getEpicMap().containsKey(idEpic)) {
                     taskManager.updateEpic(epic);
-                    String response = "Обновили эпик с Id "+ idEpic;
-                    successWrite(httpExchange, response, 200);
+                    successWrite(h, "Обновили эпик с Id "+ idEpic, 200);
                 } else {
-                    String message = "Эпика с Id " + idEpic + " нет в базе.";
-                    failureWrite(httpExchange, message, 404);
+                    failureWrite(h, "Эпика с Id " + idEpic + " нет в базе.", 404);
                 }
             }
         }
 
-        public void handlePostAddUpdateSubTask(HttpExchange httpExchange) throws IOException {
-            String body = readText(httpExchange);
+        public void handlePostAddUpdateSubTask(HttpExchange h) throws IOException {
+            String body = readText(h);
             if (body.isEmpty()) {
-                httpExchange.sendResponseHeaders(400, 0);
+                h.sendResponseHeaders(400, 0);
             }
             SubTask subTask = gson.fromJson(body, SubTask.class);
-            if (httpExchange.getRequestURI().getQuery() == null) {
-                if (!taskManager.getSubTaskMap().containsKey(subTask.getId())) {
-                    if (taskManager.getEpicMap().containsKey(subTask.getEpicId())) {
-                        taskManager.addSubTask(subTask);
-                        String response = "Создали новую подзадачу с Id " + subTask.getId();
-                        successWrite(httpExchange, response, 200);
-                    } else {
-                        String message = "Подзадачи с Id " + subTask.getEpicId() + " нет в базе.";
-                        failureWrite(httpExchange, message, 404);
-                    }
+            if (h.getRequestURI().getQuery() == null) {
+                if (taskManager.getEpicMap().containsKey(subTask.getEpicId())) {
+                    taskManager.addSubTask(subTask);
+                    successWrite(h, "Создали новую подзадачу с Id " + subTask.getId(), 200);
                 } else {
-                    String message = "Подзадача с Id " + subTask.getId() + " уже есть в базе.";
-                    failureWrite(httpExchange, message, 404);
+                    failureWrite(h, "Эпика с Id " + subTask.getEpicId() + " нет в базе.", 404);
                 }
             } else {
-                int idSubTask = setId(httpExchange);
+                int idSubTask = setId(h);
                 if (taskManager.getSubTaskMap().containsKey(idSubTask)) {
                     taskManager.updateSubTask(subTask);
-                    String response = "Обновили подзадачу с Id "+ idSubTask;
-                    successWrite(httpExchange, response, 200);
+                    successWrite(h, "Обновили подзадачу с Id "+ idSubTask, 200);
                 } else {
-                    String message = "Подзадачи с Id " + idSubTask + " нет в базе.";
-                    failureWrite(httpExchange, message, 404);
+                    failureWrite(h, "Подзадачи с Id " + idSubTask + " нет в базе.", 404);
                 }
             }
         }
